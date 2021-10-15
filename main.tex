@@ -1,0 +1,391 @@
+% -------------------------------------------------------------------
+% This is the main file for the template of doctoral thesis at
+% University of Split, Faculty of Electrical Engineering, Mechanical Engineering 
+% and Naval Architecture in Split, Croatia.
+% Initial version was created in March 2013, last update was in September 2016.
+
+% Author: Toni Perkovi�, toperkov@fesb.hr, toperkov@unist.hr
+% Author: Marin Bugari�, mbugaric@fesb.hr
+% Author: Ivo Stan�i�, istancic@fesb.hr
+% FESB 2016;
+% -------------------------------------------------------------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%% POSTAVKE / SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt, twoside, onecolumn]{book}
+%\usepackage{etex}
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=3.0cm, right=2.5cm]{geometry}
+\usepackage[absolute]{textpos}
+\setlength{\TPHorizModule}{10mm}
+\setlength{\TPVertModule}{\TPHorizModule}
+\textblockorigin{0mm}{0mm}
+%\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+%\usepackage{amsfonts}
+\usepackage{epsfig}
+\usepackage{makeidx}
+%\usepackage[tight]{subfigure}
+\usepackage{subfig}
+\usepackage{ifthen}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{enumerate}
+\usepackage{txfonts}
+\usepackage{multirow}
+\usepackage{setspace}
+\usepackage{makeidx}
+\usepackage{psfrag}
+%\usepackage{colortbl}
+\usepackage{array}
+\usepackage{calc}
+\usepackage{verbatim}
+\usepackage{rotating}
+\usepackage{graphicx}
+\usepackage[matrix,arrow,curve]{xy}
+\usepackage{textcomp}
+\usepackage{booktabs}
+\usepackage{framed}
+\usepackage{url}
+%\usepackage[all]{xy}
+\usepackage[font=it,justification=centerlast,labelsep=period]{caption}
+\usepackage{booktabs}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usetikzlibrary{arrows,matrix,decorations}
+\usepackage{setspace}
+%\usepackage{floatrow}
+%\floatsetup[table]{capposition=top}
+\usepackage[nottoc,notlot,notlof]{tocbibind}
+%\let \savenumberline \numberline
+%\def \numberline#1{\savenumberline{#1.}}
+
+\definecolor{cite}{rgb}{0,0,0.8}% blue
+\definecolor{link}{rgb}{0,0,0.8}%
+
+\usepackage[linktocpage=true]{hyperref}
+\hypersetup{
+	colorlinks=true,
+  linkcolor  = link,
+  citecolor  = cite,
+  urlcolor   = link,
+  colorlinks = true,
+}
+
+\usepackage[all]{hypcap}
+\usepackage{bookmark}
+\usepackage{hypdestopt}
+%\setcounter{tocdepth}{1}
+%\setcounter{secnumdepth}{3}
+
+%\usepackage{pslatex} % Poduplavao fontove kod matematike
+\usepackage{fancyhdr}
+
+\usepackage{etoolbox}
+
+\newcounter{citenum}
+\def\oldcite{}
+\let\oldcite=\bibcite
+\def\bibcite{\stepcounter{citenum}\oldcite}
+
+\newcounter{totfigures}
+\newcounter{tottables}
+\newcounter{totequations}
+
+\makeatletter
+\AtEndDocument{%
+  \addtocounter{totfigures}{\value{figure}}%
+  \addtocounter{tottables}{\value{table}}%
+  \addtocounter{totequations}{\value{equation}}%
+  \immediate\write\@mainaux{%
+    \string\gdef\string\totfig{\number\value{totfigures}}%
+    \string\gdef\string\tottab{\number\value{tottables}}%
+    \string\gdef\string\toteq{\number\value{totequations}}%
+    \string\gdef\string\totcite{\number\value{citenum}}%
+  }%
+}
+\makeatother
+
+\pretocmd{\chapter}{\addtocounter{totfigures}{\value{figure}}\setcounter{figure}{0}}{}{}
+\pretocmd{\chapter}{\addtocounter{tottables}{\value{table}}\setcounter{table}{0}}{}{}
+\pretocmd{\chapter}{\addtocounter{totequations}{\value{equation}}\setcounter{equation}{0}}{}{}
+
+%\usepackage[cp1250]{inputenc}
+%\usepackage[croatian]{babel}
+%\usepackage[croatian]{babelbib}
+
+
+\usepackage[T1]{fontenc}
+
+\usepackage{titlesec}
+\usepackage[nottoc,notlot,notlof]{tocbibind}
+
+\titleformat{\chapter}
+    [block]{\normalfont\bfseries\Large}{\rlap{\thechapter}}{0em}
+    {\hspace*{.05\textwidth}\begin{minipage}[t]{.9\textwidth}\raggedright}[\end{minipage}]
+
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\raggedbottom
+
+%\onehalfspacing
+\doublespacing
+
+\makeindex%
+
+\usepackage[subfigure]{tocloft}
+\usepackage{tocloft}
+
+\renewcommand\cftloftitlefont{\LARGE\bfseries}
+\renewcommand\cftfigfont{\em}
+\renewcommand\cftlottitlefont{\LARGE\bfseries}
+\renewcommand\cfttabfont{\em}
+\renewcommand\cfttoctitlefont{\LARGE\bfseries}
+
+\usepackage{tablefootnote}
+\usepackage{threeparttable}
+\usepackage{bm}
+
+% Moje naredbe
+\usepackage{cite}
+\usepackage{makecell}
+\usepackage{float}
+\usepackage[capitalise,noabbrev]{cleveref}
+\input{math_commands}
+
+
+% Floatovi
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.15}
+\renewcommand{\floatpagefraction}{0.7}
+
+\usepackage[section]{placeins}
+
+
+% Make \[ \] math have equation numbers
+\DeclareRobustCommand{\[}{\begin{equation}}
+\DeclareRobustCommand{\]}{\end{equation}}
+
+\renewcommand{\arraystretch}{1.125}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\frontmatter \pagestyle{plain}
+
+%%%%%%%%%%%%%%%%%%%% NASLOVNICA / FRONT COVER PAGE %%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+\begin{center}
+{\fontsize{13}{20}\textnormal{U N I V E R S I T Y~~O F~~S P L I T}}
+
+{\fontsize{13}{20}\textnormal{FACULTY OF ELECTRICAL ENGINEERING, MECHANICAL ENGINEERING AND NAVAL ARCHITECTURE}}
+\vskip 60mm
+\begin{textblock}{5}[0.5,0.0](10.75,10) \fontsize{14}{20}\bfseries{STANKO KRUŽIĆ} \end{textblock}
+\begin{textblock}{15.5}[0.5,0.0](10.75,12)
+{\fontsize{18}{26}\bfseries\
+ARTIFICIAL INTELLIGENCE-BASED METHODS FOR INTERACTION FORCE ESTIMATION AND MEDIATED NAVIGATION OF A ROBOT MANIPULATOR ON A MOBILE BASE}
+\vskip 20mm
+{\fontsize{14}{20}\textnormal{DOCTORAL THESIS}}
+\end{textblock}
+\begin{textblock}{5}[0.5,1.0](10.75,27.2)
+{\fontsize{13}{20}\textnormal
+Split, 2021.}
+\end{textblock}
+\newpage
+\thispagestyle{empty}
+\end{center}
+\end{titlepage}
+
+%%%%%%%%%%%%%%% PRVA UNUTARNJA STRANICA / FIRST INNER PAGE %%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+\begin{center}
+{\fontsize{13}{20}\textnormal{U N I V E R S I T Y~~O F~~S P L I T}}
+	
+{\fontsize{13}{20}\textnormal{FACULTY OF ELECTRICAL ENGINEERING, MECHANICAL ENGINEERING AND NAVAL ARCHITECTURE}}
+
+\vskip 54mm
+{\fontsize{14}{20}\bfseries{STANKO KRUŽIĆ}}
+
+\vskip 18mm
+{\fontsize{18}{18}\bfseries\
+\emph{Artificial Intelligence-based Methods for Interaction Force Estimation and Mediated Navigation of a Robot Manipulator on a Mobile Base}}
+	
+\vskip 20mm
+{\fontsize{14}{20}\textnormal{DOCTORAL THESIS}}
+
+\begin{textblock}{5}[0.5,1.0](10.75,27.2)
+{\fontsize{13}{20}\textnormal
+Split, 2021.}
+\end{textblock}
+
+\end{center}
+\newpage
+		
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{flushleft}
+\textnormal{}
+%\vskip 10mm
+
+The research reported in this thesis was carried out at Department of Electronics and Computing, University of Split, Faculty of Electrical Engineering, Mechanical Engineering and Naval Architecture.
+\vskip 12mm
+Supervisor: Assoc. prof. Josip Musić, PhD, FESB, University of Split, Croatia\\
+Co-supervisor: Prof. Roman Kamnik, PhD, FE, University of Ljubljana
+
+Disertation number: xxx-xxx
+
+\vskip 40mm
+\rule{16cm}{1.4pt}
+\vskip 2mm
+\addtolength{\leftskip}{5mm}\textnormal{BIBLIOGRAPHIC INFORMATION}
+\vskip 2mm
+\textnormal{Keywords: xxxxx, yyyyy}
+\vskip 0mm
+\textnormal{Scientific area: xxxxx}
+\vskip 0mm
+\textnormal{Scientific field: xxxxx}
+\vskip 0mm
+\textnormal{Scientific branch: xxxxx}
+\vskip 0mm
+\textnormal{Institution of PhD completion: University of Split, Faculty of Electrical Engineering, Mechanical Engineering and Naval Architecture}
+\vskip 0mm
+\textnormal{Supervisor of the thesis: Xxxx dr.sc. Xxxx Yyyyy}
+\vskip 0mm
+\textnormal{Number of pages: yyy}
+\vskip 0mm
+\textnormal{Number of figures: yyy}
+\vskip 0mm
+\textnormal{Number of tables: yyy}
+\vskip 0mm
+\textnormal{Number of references: yyy}
+\vskip 0mm
+\rule{16cm}{1.4pt}
+\addtolength{\leftskip}{-5mm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\textnormal{}
+\vskip 30mm
+Committee for assessment of doctoral dissertation:
+
+\begin{enumerate}
+\item Xxxx. dr. sc. Xxxx Yyyyy, Institution name and City/Town
+\item Xxxx. dr. sc. Xxxx Yyyyy, Institution name and City/Town
+\item Xxxx. dr. sc. Xxxx Yyyyy, Institution name and City/Town
+\item Xxxx. dr. sc. Xxxx Yyyyy, Institution name and City/Town
+\item Xxxx. dr. sc. Xxxx Yyyyy, Institution name and City/Town
+\end{enumerate}
+
+\vskip 15mm
+Committee for defence of doctoral dissertation:
+
+\begin{enumerate}
+\item Xxxx. dr. sc. Xxxx Yyyyy, Institution name and City/Town
+\item Xxxx. dr. sc. Xxxx Yyyyy, Institution name and City/Town
+\item Xxxx. dr. sc. Xxxx Yyyyy, Institution name and City/Town
+\item Xxxx. dr. sc. Xxxx Yyyyy, Institution name and City/Town
+\item Xxxx. dr. sc. Xxxx Yyyyy, Institution name and City/Town
+\end{enumerate}
+\vskip 15mm
+Dissertation defended on: xx. month. 20xx.
+
+\end{flushleft}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% abstract in English
+\include{eg_abstract_eng}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% abstract in Croatian
+\include{eg_abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%empty page (no numbering)
+\newpage
+\thispagestyle{empty}
+\textnormal{}  %empty line activated
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% insert optional page with thanks or dedication
+\include{eg_thanks_dedication}
+
+\end{titlepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TOC %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{2}
+
+\clearpage
+\phantomsection
+\setlength\cftbeforetabskip{10pt}
+\begin{spacing}{1}
+\listoftables
+\addcontentsline{toc}{section}{List of Tables}
+\end{spacing}
+
+\clearpage
+\phantomsection
+\begin{spacing}{1}
+\setlength\cftbeforefigskip{10pt}
+\listoffigures
+\addcontentsline{toc}{section}{List of Figures}
+\end{spacing}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% AKRONIMI %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\include{eg_acronyms}
+
+\sloppypar{
+
+\mainmatter
+
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+
+\fancyhf{}
+%\fancyhead[LE,RO]{\thepage}
+\cfoot{\thepage}
+\fancyhead[LE]{\textit{\nouppercase{\leftmark}}}
+\fancyhead[RO]{\textit{\nouppercase{\leftmark}}}
+
+\newpage \thispagestyle{empty} 
+%%%%%%%%%%%%%%%%%%%%%%%% POGLAVLJA / CHAPTERS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{01_intro}
+\include{02_literature}
+\include{03_mm}
+\include{04_results}
+\include{05_conclusion}
+
+
+\cleardoublepage
+%%%%%%%%%%%%%%%%%%%%%%% LITERATURA / BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%
+% bibliography style file is modified IEEEtranFESB_eng.bst file,
+% changed to suit FESB's literature style
+
+\renewcommand{\bibname}{BIBLIOGRAPHY}
+\begin{spacing}{1}
+\bibliographystyle{IEEEtranFESB_eng}
+\bibliography{citati}
+\end{spacing}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% PRILOG / APPENDIX %%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{eg_appendix}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% ŽIVOTOPIS / BIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{cv} % CV in English
+}
+\end{document}

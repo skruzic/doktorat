@@ -1,0 +1,67 @@
+% -------------------------------------------------------------------
+% Author: Toni Perković, toperkov@fesb.hr, toperkov@unist.hr
+% Author: Marin Bugarić, mbugaric@fesb.hr
+% Author: Ivo Stančić, istancic@fesb.hr
+% FESB 2016;
+% -------------------------------------------------------------------
+
+%\newpage \mbox{} \newpage \pagestyle{empty}
+
+\chapter*{APPENDIX}
+\label{chap:Appendix}
+
+\addcontentsline{toc}{chapter}{APPENDIX}
+
+\markboth{APPENDIX}{}
+
+\section*{Numbers, arrays, functions and indexing notation}
+
+{
+    \begin{tabular}{p{2cm}p{12.5cm}}
+    $a$ 			& Scalar (integer or real) \\
+    $\va$		    & Vector \\
+    $\mA$		    & Matrix \\
+    %$\tA$			& Tensor \\
+    $a_t$           & Scalar at time instance $t$ \\
+    $\va_t$		    & Vector at time instance $t$\\
+    $\mA_t$		    & Matrix at time instance $t$\\
+    \end{tabular}
+}
+
+\section*{Functions}
+
+{
+    \begin{tabular}{p{2cm}p{12.5cm}}
+    $f(\cdot)$  	& Scalar-valued function \\
+    $\vf(\cdot)$	& Vector-valued function \\
+    $f(\cdot; \vtheta)$ & Scalar-valued function parametrised by $\vtheta$ \\
+    $\vf(\cdot; \vtheta)$ & Vector-valued function parametrised by $\vtheta$ \\
+    \end{tabular}
+}
+
+\section*{Linear algebra notation}
+
+{
+    \begin{tabular}{p{2cm}p{12.5cm}}
+    $\mA^\top$		& Transpose of $\mA$ \\
+    $\mA^\dagger$   & Pseudoinverse of $\mA$ \\
+    $\|\vx\|$       & $L^2$ norm of $\vx$\\
+    $\|\vx\|_p$     & $L^p$ norm of $\vx$
+    \end{tabular}
+}
+
+\section*{Neural networks notation}
+
+{
+    \begin{tabular}{p{2cm}p{12.5cm}}
+    $\mW_i$ & Kernel of the $i$-th layer \\
+    $\vb_i$ & Bias of the $i$-th layer \\
+    $\mtheta_i$ & Neural network parameters of the $i$-th layer \\
+    $g_i(\cdot)$ & Activation function of the $i$-th layer \\
+    $\vx^{(i)}$ & The $i$-th example from a dataset \\
+    $y^{(i)}$ or $\vy^{(i)}$ & Target or label associated with $\vx^{(i)}$
+    \end{tabular}
+}
+
+
+\newpage
