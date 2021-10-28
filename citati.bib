@@ -134,30 +134,23 @@
   doi       = {10.1109/ner.2015.7146566},
 }
 
-@Article{Lutter2019,
-  author        = {Michael Lutter and Christian Ritter and Jan Peters},
-  title         = {Deep Lagrangian Networks: Using Physics as Model Prior for Deep Learning},
-  year          = {2019},
-  month         = jul,
-  abstract      = {Deep learning has achieved astonishing results on many tasks with large amounts of data and generalization within the proximity of training data. For many important real-world applications, these requirements are unfeasible and additional prior knowledge on the task domain is required to overcome the resulting problems. In particular, learning physics models for model-based control requires robust extrapolation from fewer samples - often collected online in real-time - and model errors may lead to drastic damages of the system. Directly incorporating physical insight has enabled us to obtain a novel deep model learning approach that extrapolates well while requiring fewer samples. As a first example, we propose Deep Lagrangian Networks (DeLaN) as a deep network structure upon which Lagrangian Mechanics have been imposed. DeLaN can learn the equations of motion of a mechanical system (i.e., system dynamics) with a deep network efficiently while ensuring physical plausibility. The resulting DeLaN network performs very well at robot tracking control. The proposed method did not only outperform previous model learning approaches at learning speed but exhibits substantially improved and more robust extrapolation to novel trajectories and learns online in real-time},
-  archiveprefix = {arXiv},
-  eprint        = {1907.04490},
-  file          = {:http\://arxiv.org/pdf/1907.04490v1:PDF},
-  keywords      = {cs.LG, cs.RO, cs.SY, eess.SY, stat.ML},
-  primaryclass  = {cs.LG},
+@InProceedings{Lutter2019,
+  author    = {Michael Lutter and Christian Ritter and Jan Peters},
+  booktitle = {International Conference on Learning Representations},
+  title     = {Deep Lagrangian Networks: Using Physics as Model Prior for Deep Learning},
+  year      = {2019},
+  url       = {https://openreview.net/forum?id=BklHpjCqKm},
 }
 
-@Article{Cranmer2020,
+@InProceedings{Cranmer2020,
   author        = {Miles Cranmer and Sam Greydanus and Stephan Hoyer and Peter Battaglia and David Spergel and Shirley Ho},
+  booktitle     = {ICLR 2020 Workshop on Integration of Deep Neural Models and Differential Equations},
   title         = {Lagrangian Neural Networks},
   year          = {2020},
   month         = mar,
-  abstract      = {Accurate models of the world are built upon notions of its underlying symmetries. In physics, these symmetries correspond to conservation laws, such as for energy and momentum. Yet even though neural network models see increasing use in the physical sciences, they struggle to learn these symmetries. In this paper, we propose Lagrangian Neural Networks (LNNs), which can parameterize arbitrary Lagrangians using neural networks. In contrast to models that learn Hamiltonians, LNNs do not require canonical coordinates, and thus perform well in situations where canonical momenta are unknown or difficult to compute. Unlike previous approaches, our method does not restrict the functional form of learned energies and will produce energy-conserving models for a variety of tasks. We test our approach on a double pendulum and a relativistic particle, demonstrating energy conservation where a baseline approach incurs dissipation and modeling relativity without canonical coordinates where a Hamiltonian approach fails. Finally, we show how this model can be applied to graphs and continuous systems using a Lagrangian Graph Network, and demonstrate it on the 1D wave equation.},
   archiveprefix = {arXiv},
-  eprint        = {2003.04630},
-  file          = {:http\://arxiv.org/pdf/2003.04630v2:PDF},
-  keywords      = {cs.LG, math.DS, physics.comp-ph, physics.data-an, stat.ML},
   primaryclass  = {cs.LG},
+  url           = {https://openreview.net/forum?id=iE8tFa4Nq},
 }
 
 @InProceedings{Ledezma2017,
@@ -1331,6 +1324,46 @@
   title        = {Understanding LSTM Networks},
   year         = {2015},
   url          = {\url{https://colah.github.io/posts/2015-08-Understanding-LSTMs/}},
+}
+
+@Article{Sebastian2019,
+  author    = {Gijo Sebastian and Zeyu Li and Vincent Crocher and Demy Kremers and Ying Tan and Denny Oetomo},
+  journal   = {{IEEE} Robotics and Automation Letters},
+  title     = {Interaction Force Estimation Using Extended State Observers: An Application to Impedance-Based Assistive and Rehabilitation Robotics},
+  year      = {2019},
+  month     = {apr},
+  number    = {2},
+  pages     = {1156--1161},
+  volume    = {4},
+  doi       = {10.1109/lra.2019.2894908},
+  publisher = {Institute of Electrical and Electronics Engineers ({IEEE})},
+}
+
+@Misc{Mover6,
+  author       = {{Commonplace Robotics GmbH}},
+  howpublished = {\url{https://cpr-robots.com/education}},
+  note         = {Accessed on 20th October 2021},
+  title        = {Mover6 - 6-axis robot arm for research and development},
+}
+
+@Misc{MordorIntelligence2020,
+  author       = {{Mordor Intelligence}},
+  howpublished = {\url{https://www.mordorintelligence.com/industry-reports/robotics-market}},
+  note         = {Accessed on 21st October 2021},
+  title        = {Global Robotics Market - Growth, Trends, Covid-19 Impact, And Forecasts (2021 - 2026)},
+  year         = {2020},
+}
+
+@Article{Yada2021,
+  author    = {Yuichiro Yada and Shusaku Yasuda and Hirokazu Takahashi},
+  title     = {Physical reservoir computing with {FORCE} learning in a living neuronal culture},
+  year      = {2021},
+  month     = {oct},
+  number    = {17},
+  pages     = {173701},
+  volume    = {119},
+  doi       = {10.1063/5.0064771},
+  publisher = {{AIP} Publishing},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}
