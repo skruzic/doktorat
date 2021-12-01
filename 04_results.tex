@@ -7,7 +7,7 @@ The results obtained in the experiments show that the neural networks for obstac
 
 \subsection{Parameters identification experiment}\label{Sec:ResLabelling}
 
-The first thing to notice in this experiment is that, by using datasets created by using different parameters for the number of LiDAR points and thresholds, the ratio between numbers of positive and negative training samples is different, although the same raw data are used. That is because, when using lower threshold values, the robot can come closer to the obstacle and for that reason, there are more positive samples than higher threshold values. Similar reasoning can be applied to the other parameter in question, the number of points needed to classify a sample as negative. This parameter also had a significant impact on the imbalance between the positive and negative samples in the dataset since the number of points is a crucial parameter to decide if something is an obstacle or not. The ratios between positive and negative samples as a function of these parameters are shown in \cref{fig:Brojevi}. Finally, please note that data in the figure is for the neural network for moving forward; similar trends emerge for neural networks for going left and right.
+The first thing to notice in this experiment is that, by using datasets created by using different parameters for the number of LiDAR points and thresholds, the ratio between numbers of positive and negative training samples is different, although the same raw data are used. That is because, when using lower threshold values, the robot can come closer to the obstacle and for that reason, there are more positive samples than higher threshold values. Similar reasoning can be applied to the other parameter in question, the number of points needed to classify a sample as negative. Note that positive samples likely won't result in a crash, while negative samples would result in a collision. This parameter also had a significant impact on the imbalance between the positive and negative samples in the dataset since the number of points is a crucial parameter to decide if something is an obstacle or not. The ratios between positive and negative samples as a function of these parameters are shown in \cref{fig:Brojevi}. Finally, please note that data in the figure is for the neural network for moving forward; similar trends emerge for neural networks for going left and right.
 
 \begin{figure}
 \centering
@@ -18,7 +18,7 @@ The first thing to notice in this experiment is that, by using datasets created 
 
 It was also observed that there were more crash events for datasets created with threshold parameter values of 0.4 m and 0.6 m than with other setups. It is likely due to the uneven numbers of positive and negative samples used for the training of neural networks (as per Figure \ref{fig:Brojevi}). These datasets have a significantly higher number of positive samples than negative, which is not the case with setups with threshold parameters equal to 0.8 m and 1 m. This disbalance emphasises the importance of negative samples for learning and is in line with \cite{Gandhi2017}, and neural networks may need to be fed with more training samples given the current ratio between negative and positive samples to achieve improved performance. The experiment also demonstrated that for neural networks trained with a threshold of  1 m robot executed a significant number of in-place rotations due to the course's narrowness (which was 2.16 m and augmented with additional obstacles). The robot is 0.35 m in diameter, so it needed additional in-place rotations to ``find'' an obstacle-free route.
 
-Out of 60 trials with different neural networks (i.e., neural networks trained with different datasets), in 47 trials, the robot did not complete the course (i.e., get to the other side of the corridor/course), while in the other 13 trials the course was completed. This outcome is not surprising since the robot is not aware of our goal point. It freely roams through the course, going forward when the space in front of it is obstacle-free, and avoiding the obstacle otherwise, which often results in the robot turning away from the course end (which should not be considered as a flaw of the approach, but the limitation of the experimental setup).
+Out of 60 trials with different neural networks (i.e., neural networks trained with different datasets), in 47 trials, the robot did not complete the course (i.e., get to the other side of the corridor/course), while in the other 13 trials the course was completed. This outcome is not surprising since the robot is not aware of the goal point. It freely roams through the course, going forward when the space in front of it is obstacle-free, and avoiding the obstacle otherwise, which often results in the robot turning away from the course end (which should not be considered as a flaw of the approach, but the limitation of the experimental setup).
 
 \begin{table}[H]
 \centering
@@ -121,7 +121,7 @@ There were five measurement repetitions in the U-shaped obstacle experiment (fiv
     \label{fig:Fig09}
 \end{figure}
 
-It should be noted that for this scenario, the robot crashed at least once for all cases (25\% data 3 out of 5 times, 50\% data 3 out of 5 times, and 75\% 1 out of 5 times). The exception was for the case with 100\% data. In contrast, any reduction in training data resulted in reduced reliability (especially in 25\% and 50\% test cases).
+It should be noted that for this scenario, the robot crashed at least once for all cases (25 \% data 3 out of 5 times, 50 \% data 3 out of 5 times, and 75 \% 1 out of 5 times). The exception was for the case with 100 \% data. In contrast, any reduction in training data resulted in reduced reliability (especially in 25 \% and 50 \% test cases).
 
 These results led to the conclusion that the amount of collected crash data is just right, but perhaps even more crash data could prove beneficial for the reliable performance of obstacle avoidance in such challenging situations. It should also be noted that convex dead-ends pose a particular problem to the proposed obstacle avoidance approach. However, the approach is not intended to be used all by itself. Instead, it should be used in conjunction with navigation to the given goal, shown later on.
 
@@ -129,9 +129,9 @@ These results led to the conclusion that the amount of collected crash data is j
 
 This experiment consisted of 20 test cases (5 repetitions for each of 4 neural network setups, as in the U-shape obstacle course), in all of which the robot did not pass the corridor as was intended (\cref{fig:Fig10}), signalling that there is still room for improvement. However, two interesting observations were made during the experiments. 
 
-First, in 25\% and 50\% cases, the robot performed a U-turn and thus did not crash with the obstacle. However, this behaviour was not the desired one, but strictly speaking, it did avoid obstacles, which is the method's goal. 
+First, in 25 \% and 50 \% cases, the robot performed a U-turn and thus did not crash with the obstacle. However, this behaviour was not the desired one, but strictly speaking, it did avoid obstacles, which is the method's goal. 
 
-Finally, for the 100\% case, the robot moved the fastest but crashed with the final obstacle in all 5 test cases. However, it was observed that in all such cases, a crash occurred because the obstacle was too close to the robot’s right-hand side (while the robot started moving left and forward), so when it started to turn right, it simply did not notice the obstacle due to LiDAR minimum range issues and the way we processed such data. Thus, it can be considered a drawback of the sensor rather than a method (which could be reduced or eliminated with additional sensors like ultrasound range finders).
+Finally, for the 100 \% case, the robot moved the fastest but crashed with the final obstacle in all 5 test cases. However, it was observed that in all such cases, a crash occurred because the obstacle was too close to the robot’s right-hand side (while the robot started moving left and forward), so when it started to turn right, it simply did not notice the obstacle due to LiDAR minimum range issues and the way we processed such data. Thus, it can be considered a drawback of the sensor rather than a method (which could be reduced or eliminated with additional sensors like ultrasound range finders).
 
 \begin{figure}
     \centering
@@ -230,7 +230,7 @@ Example trajectories (random $10$ out of $15$ for both test cases) obtained in t
     \label{fig:SimulationTest}
 \end{figure}
 
-It is worth noting that the mobile base never crashed for the neural network-based navigation controller, while for the P-type-based navigation controller, in four cases ($26\%$) crash occurred. Due to the observed robot behaviour during the experiment, the conclusion was drawn that this was mainly due to the ``aggressive'' nature of the P-type controller (especially in rotation), which tries to get to the goal point in a straight line, while neural network-based navigation tries to do the same but with a slightly arched trajectory, as can be seen in \cref{fig:SimulationTest}. Such behaviour makes it hard for neural network-based obstacle avoidance to recover (or even results in LiDAR failure due to an obstacle being too close). However, additional parameters, like goal points too close to the obstacles or in physically unreachable cases, might have, in some instances, contributed to the crash event. 
+It is worth noting that the mobile base never crashed for the neural network-based navigation controller, while for the P-type-based navigation controller, in four cases (26 \%) crash occurred. Due to the observed robot behaviour during the experiment, the conclusion was drawn that this was mainly due to the ``aggressive'' nature of the P-type controller (especially in rotation, when trying to reach the goal as directly as possible, ideally in a straight line), which tries to get to the goal point in a straight line. In contrast, neural network-based navigation tries to do the same but with a slightly arched trajectory, as can be seen in \cref{fig:SimulationTest}. Such behaviour makes it hard for neural network-based obstacle avoidance to recover (or even results in LiDAR failure due to an obstacle being too close). However, additional parameters, like goal points too close to the obstacles or in physically unreachable cases, might have, in some instances, contribu6ted to the crash event. 
 
 Looking at the presented trajectories in Figure \ref{fig:SimulationTest} several interesting observations can be made. First, the P-type controller results in a more direct approach to the goal (i.e., the ``aggressive'' nature mentioned before), while the neural network-based navigation takes a more circular trajectory even when the goal is in the line of sight with no obstacles in-between. From Figure \ref{Fig:Gazebo_P} it can also be observed that when the goal is too close to the obstacle (trajectory with the black dashed line and diamond goal marker), the robot might not reach its intended goal (since the mediation algorithm switches it to obstacle avoidance). Some improvement might be possible here if an adaptive collision probability calculation is employed using the remaining distance to the goal and the adaptive robot velocity (but clearly, there is a limit to this approach). Next, when the goal is placed within the obstacle (especially if it is within a corner type environment - pink line trajectory with a pentagram goal marker), the crash is inevitable since the obstacle avoidance does not react appropriately, i.e. there is no stop-and-turn in-place mechanism. This behaviour, however, does not seem to be the failure of the proposed fuzzy mediation approach (since it worked as intended) but highlights shortcomings of the developed obstacle avoidance approach (and ways of improving it, e.g. in-place rotation). Finally, if the target is close to the obstacle, but still far enough so that obstacle avoidance is not activated (black line trajectory with asterisk goal marker), it might take a while for a robot to reach the goal (switching several times between navigation and obstacle avoidance controller - note the end part of the trajectory), but it will reach it. Looking more closely at the Figure \ref{Fig:Gazebo_NN}, it can be seen once more that the robot does not take the most direct route and that obstacles sometimes interfere with the navigation (i.e. trigger the obstacle avoidance) as depicted by the black full line trajectory with asterisk goal marker and blue dotted trajectory with \emph{x} goal marker. This behaviour extends the distance travelled, but the robot ultimately reaches its goal, even when the goal point is close to the obstacle (trajectories with a red line with triangle end marker and a blue line with square end marker).
 
@@ -256,11 +256,11 @@ The figure shows that for all three setups, the robot reached the goal area (the
 \label{Fig:Trajektorije_prepreke}
 \end{figure}
 
-It is interesting to note that DWA also had some issues with U-shaped obstacles. These issues resulted in longer navigation runs than both setups for the proposed approach (94.93 s vs 62.94 s vs 67.36 s for the neural network and P-controller setup, respectively). Completion times for the Z-shaped obstacle were similar for all three setups (DWA: 41.63 s, neural network: 39.06 s, and P-controller: 41.27 s, for this particular example). However, on average, ROS/DWA was the fastest method in all cases, but not always the one with the shortest distance travelled (please see \cref{Tbl:ResultsSummary}). In all experimental runs except one (for the U-shaped obstacle), the robot went left to avoid the obstacle and complete the course. In the mentioned single case, the robot went right to avoid the obstacle and into the narrow space (1.4 m) between the wall and the obstacle. Such decisions resulted in the longer run (102.32 s) with more direction changes because, during the entire run, the control was dominated by obstacle avoidance. These tests seem to have demonstrated that the proposed approach can be applied even in more demanding cases like the U-shape obstacle, but with certain limitations. Namely, the mediation approach lengthens the run due to the domination of the obstacle avoidance part. However, shortcoming could be avoided by using a more appropriate navigation controller with some waypoints on the way to the given goal, rather than just a goal point, as was the case in this experiment.
+It is interesting to note that DWA also had some issues with U-shaped obstacles. These issues resulted in longer navigation runs than both setups for the proposed approach (94.93 s vs 62.94 s vs 67.36 s for DWA, the neural network and P-controller setup, respectively). Completion times for the Z-shaped obstacle were similar for all three setups (DWA: 41.63 s, neural network: 39.06 s, and P-controller: 41.27 s, for this particular example). However, on average, ROS/DWA was the fastest method in all cases, but not always the one with the shortest distance travelled (please see \cref{Tbl:ResultsSummary}). In all experimental runs except one (for the U-shaped obstacle), the robot went left to avoid the obstacle and complete the course. In the mentioned single case, the robot went right to avoid the obstacle and into the narrow space (1.4 m) between the wall and the obstacle. Such decisions resulted in the longer run (102.32 s) with more direction changes because, during the entire run, the control was dominated by obstacle avoidance. These tests demonstrated that the proposed approach can be applied even in more demanding cases like the U-shape obstacle, but with certain limitations. Namely, the mediation approach lengthens the run due to the domination of the obstacle avoidance part. However, shortcoming could be avoided by using a more appropriate navigation controller with some waypoints on the way to the given goal, rather than just a goal point, as was the case in this experiment.
 
 The change in the collision probability and $\zeta$ parameter values for both test cases (where the mediation was used) can be seen in Figures \ref{Fig:Trajektorije_preprekeB} and \ref{Fig:Trajektorije_preprekeD}. Please note that the value of 1 for the parameter $\zeta$ means that the obstacle avoidance controller is in complete control of the robot, and 0 is in pure navigation mode. All values in between mean that the mediation approach considers both the navigation and obstacle avoidance controller (in an appropriate proportion).
 
-Next, a more demanding navigation task was used to test the proposed mediation approach in the larger environment and a realistic scenario. The experiment was conducted on the fourth floor at the University of Split, Faculty of Electrical Engineering, Mechanical Engineering and Naval Architecture, while Turtlebot 2 robot was used in the experiment. Examples of the obtained trajectories (for two different goal points) are depicted in Figure \ref{Fig:Trajektorije_hodnik}. Please note that although the obtained trajectories are plotted on the map, the robot itself did not have access to the map in the proposed approach (but does have it without obstacles for ROS/DWA case). In essence, robot path planning is a straight line, going from the start to the proposed approach's goal position. From the figure, it can be observed that the robot successfully reached the goals in all cases, with ROS/DWA again having a more direct route which is reflected in completion times in Table \ref{Tbl:ResultsSummary}. The main reason for this is that the upper corridor in which the robot had to enter was narrow (1.8 m) and resulted in the activation of the obstacle avoidance part, which turned the robot away from it if the approach angle was not appropriate. It is also evident that trajectories obtained using neural network-based navigation controller resulted (again) in smoother trajectories than those with P-type controller, which was a consequence of the ``aggressiveness'' of the P-type controller in trying to reach the goal. In terms of speed, i.e., completion time, the following results were obtained: 295.56 s and 195.44 s for DWA case, 337.51 s and 296.05 s for neural network case, and finally 479.76 and 453.34 s for the P case. It should be noted that for specific start-goal point configurations, the robot got stuck at certain areas in space, constantly switching between obstacle avoidance and navigation. A similar effect was reported in \cite{Pfeiffer2017} and could potentially be reduced/eliminated by inserting several waypoints.
+Next, a more demanding navigation task was used to test the proposed mediation approach in the larger environment and a realistic scenario. The experiment was conducted on the fourth floor at the University of Split, Faculty of Electrical Engineering, Mechanical Engineering and Naval Architecture, while Turtlebot 2 robot was used in the experiment. Examples of the obtained trajectories (for two different goal points) are depicted in Figure \ref{Fig:Trajektorije_hodnik}. Please note that although the obtained trajectories are plotted on the map, the robot itself did not have access to the map in the proposed approach (but does have it without obstacles for ROS/DWA case). In essence, robot path planning is a straight line, going from the start to the proposed approach's goal position. From the figure, it can be observed that the robot successfully reached the goals in all cases, with ROS/DWA again having a more direct route which is reflected in completion times in Table \ref{Tbl:ResultsSummary}. The main reason for this is that the upper corridor in which the robot had to enter was narrow (1.8 m) and resulted in the activation of the obstacle avoidance part, which turned the robot away from it if the approach angle was not appropriate. It is also evident that trajectories obtained using neural network-based navigation controller resulted (again) in smoother trajectories than those with P-type controller, which was a consequence of the ``aggressiveness'' of the P-type controller in trying to reach the goal. In terms of speed, i.e., completion time, the following results were obtained: 295.56 s and 195.44 s for DWA case, 337.51 s and 296.05 s for neural network case, and finally 479.76 s and 453.34 s for the P case. It should be noted that for specific start-goal point configurations, the robot got stuck at certain areas in space, constantly switching between obstacle avoidance and navigation. A similar effect was reported in \cite{Pfeiffer2017} and could potentially be reduced/eliminated by inserting several additional waypoints.
 
 \begin{figure}
 \centering
@@ -283,7 +283,7 @@ In the next stage of testing, a custom-built robot with a different footprint wa
 \label{Fig:paletarTesting}
 \end{figure}
 
-The results show that the robot successfully (i.e., without the crash) completed the task in all test cases. Please note again that the robot did not have access to the map in mediation test cases, while for ROS/DWA, it had but without obstacles. As in all cases before, the ROS/DWA seems to have a more direct trajectory. This more straight trajectory is, however, misleading since this approach had, in all cases, several in-place turns (which are not visible in the figure but are reflected in the time results in Table \ref{Tbl:ResultsSummary}) and even some backward driving (as seen in the figure in the case of bottom dotted black line trajectory). This observation is confirmed when completion times are examined (for goal points from top to bottom): the neural network-based navigation had times of 59 s, 75 s, and 85 s, the P-type navigation controller had times of 49 s, 74 s, and 82 s, while ROS navigation stack with DWA obstacle avoidance had times of 99 s, 122 s, and 110 s, respectively. Thus, it can be concluded, looking at the timings, that due to the more direct approach, the P-type controller had the fastest times and shorter distance travelled (Table \ref{Tbl:ResultsSummary}). Regardless of achieved times, the proposed fuzzy mediation algorithm performed as intended, mediating between two distinct robot behaviours. 
+The results show that the robot successfully (i.e., without the crash) completed the task in all test cases. Please note again that the robot did not have access to the map in mediation test cases, while for ROS/DWA, it had but without obstacles. As in all cases before, the ROS/DWA seems to have a more direct trajectory. This more straight trajectory is, however, misleading since this approach had, in all cases, several in-place turns (which are not visible in the figure but are reflected in the time results in Table \ref{Tbl:ResultsSummary}) and even some backward driving (as seen in the figure in the case of bottom dotted black line trajectory). This observation is confirmed when completion times are examined (for goal points from top to bottom): the neural network-based navigation achieved times of 59 s, 75 s, and 85 s, the P-type navigation controller of 49 s, 74 s, and 82 s, while ROS navigation stack with DWA obstacle avoidance achieved 99 s, 122 s, and 110 s, respectively. Thus, it can be concluded, looking at the timings, that due to the more direct approach, the P-type controller achieved the fastest times and shorter distance travelled (Table \ref{Tbl:ResultsSummary}). Regardless of achieved times, the proposed fuzzy mediation algorithm performed as intended, mediating between two distinct robot behaviours. 
 
 As the final test, a more complex navigation task with the custom-built robot was introduced. The experiment was conducted in the same environment as in the complex navigation task of the Turtlebot 2 robot. Obtained results are depicted in Figure \ref{Fig:Trajektorije_hodnik2}.
 
@@ -304,7 +304,7 @@ Please note that improved/faster performance might be achieved if numerous ROS/D
 
 \subsection{Teleoperation scenario} \label{sec:MediationTeleopResults}
 
-During the application-based testing, users in all test cases completed the given task. However, in $100\%$ of cases with \emph{surprise obstacles} case, the mediation algorithm activated the neural network-based obstacle avoidance, while in $47\%$ of cases with \emph{no surprise obstacles} instances, the fuzzy mediation activated obstacle avoidance. This behaviour highlights the need for inclusion of such a safety mechanism (possibly fine-tuned by an operator) in teleoperation, since, with even one visible large obstacle (as was the case here), operators did not manage to complete the task without the danger of damaging either the robot or the obstacle. It should, however, be noted that in $23\%$ of all cases, when the mediator transferred the control to obstacle avoidance, the robot did not hit the obstacle but did slightly brush against it. This observation indicates that additional work is needed in adaptive mediator parameter adjustment and improving the obstacle avoidance algorithm (possibly training it to react at greater distances than 1 m, as was the case, or implementing in-place rotation). Another worthwhile remark recorded during test subjects' post-measurement interviews is that test subjects were not always sure (especially when control was not fully transferred to obstacle avoidance) if the robot was in obstacle avoidance or simply an issue was in communication/lag. Thus they suggested including a graphical user interface (or even tactile feedback) indicating when and how strongly did fuzzy mediator transfer control to obstacle avoidance (or any other controller for that matter).
+During the application-based testing, users in all test cases completed the given task. However, in 100 \% of cases with \emph{surprise obstacles} case, the mediation algorithm activated the neural network-based obstacle avoidance, while in 47 \% of cases with \emph{no surprise obstacles} instances, the fuzzy mediation activated obstacle avoidance. This behaviour highlights the need for inclusion of such a safety mechanism (possibly fine-tuned by an operator) in teleoperation, since, with even one visible large obstacle (as was the case here), operators did not manage to complete the task without the danger of damaging either the robot or the obstacle. It should, however, be noted that in 23 \% of all cases, when the mediator transferred the control to obstacle avoidance, the robot did not hit the obstacle but did slightly brush against it. This observation indicates that additional work is needed in adaptive mediator parameter adjustment and improving the obstacle avoidance algorithm (possibly training it to react at greater distances than 1 m, as was the case, or implementing in-place rotation). Another worthwhile remark recorded during test subjects' post-measurement interviews is that test subjects were not always sure (especially when control was not fully transferred to obstacle avoidance) if the robot was in obstacle avoidance or simply an issue was in communication/lag. Thus they suggested including a graphical user interface (or even tactile feedback) indicating when and how strongly did fuzzy mediator transfer control to obstacle avoidance (or any other controller for that matter).
 
 Looking at the responses for the first two questions of the mini-survey, which each test subject completed after finishing the experiment, the following results were obtained. For the question \emph{Did you feel in complete control during the teleoperation?} the average response had a value of 66.4 with a standard deviation of 11.0 (where 0 represents ``I was not in a full control.'' response, and 100 ``I was in a full control.'' response, while 50 represented neutral response). For the question \emph{Do you feel that automatic obstacle avoidance through mediation helped you during teleoperation?} the mean response had a value of 66.0 with a standard deviation of 15.1 (where 0 represented ``I strongly feel it did not.'' response, and 100 ``It strongly feel it did.'' response, while 50 represented neutral response). Finally, for the third question \emph{Was completing the required task easier with or without the mediation?} 8 out of 9 test subjects ($89\%$) felt that the task completion was easier with mediation.
 
@@ -313,26 +313,27 @@ Based on the obtained results from the mini-study, we can conclude that users ge
 \section{Force and joint torques estimation}
 
 \subsection{End-effector force estimation}
+\label{sec:ResultsEE}
 
 Networks presented in Table \ref{tab:NetworksMover} were trained, with the results being presented in Table \ref{tab:ResultsMover} (with row numbers corresponding between the tables). The validation loss and test loss (obtained using the MAE loss function) measure network performance.  As a metric of fit between targets and predictions, root-mean-square errors (RMSE) are also reported. Please note that all reported loss values are computed for all three principal axes together and are $L^2$ norms of vector losses along principal axes, while in this case, RMSE values are reported on the test set along each of the principal axes separately.
 
 \begin{table}
-    \caption{Networks perfomance and RMSE metric along principal axes}
+    \caption{Networks perfomance and RMSE metric along principal axes for Mover6 robot}
     \label{tab:ResultsMover}
     \centering
-    \begin{tabular}{cccccc}
+    \begin{tabular}{ccccccc}
         \toprule
-        \textbf{\#} & \textbf{Val. MAE} & \textbf{Test MAE} & \textbf{RMSE\textsubscript{x}} & \textbf{RMSE\textsubscript{y}} & \textbf{RMSE\textsubscript{z}} \\
+        \textbf{No.} & \textbf{Architecture} & \textbf{Validation Loss} & \textbf{Test Loss} & \textbf{RMSE\textsubscript{x}} & \textbf{RMSE\textsubscript{y}} & \textbf{RMSE\textsubscript{z}} \\
         \midrule
-        1. & 1.92130 & 3.5392 & 2.5623 & 3.0335 & 2.7934\\
-        2. & 2.10563 & 3.2132 & 2.8725 & 3.0540 & 2.7845\\
-        3. & 1.95203 & 3.4192 & 2.6007 & 2.8154 & 2.5659\\
-        4. & 2.02529 & 3.4508 & 2.8554 & 2.9534 & 2.6193 \\
-        5. & 1.92932 & 3.5604 & 2.5468 & 2.7671 & 2.4515\\
-        6. & \textbf{1.88883} & 3.3298 & \textbf{2.5386} & \textbf{2.7577} & \textbf{2.3894} \\
-        7. & 2.02308 & 3.3601 & 2.5757 & 2.9328 & 2.6488 \\
-        8. & 1.96090 & \textbf{3.0722} & 2.5637 & 2.8173 & 2.5134\\
-        9. & 1.97469 & 3.5950 & 2.6007 & 2.8573 & 2.6239 \\
+        1 & MLP & 1.92130 & 3.5392 & 2.5623 & 3.0335 & 2.7934\\
+        2 & MLP & 2.10563 & 3.2132 & 2.8725 & 3.0540 & 2.7845\\
+        3 & MLP & 1.95203 & 3.4192 & 2.6007 & 2.8154 & 2.5659\\
+        4 & Conv & 2.02529 & 3.4508 & 2.8554 & 2.9534 & 2.6193 \\
+        5 & Conv & 1.92932 & 3.5604 & 2.5468 & 2.7671 & 2.4515\\
+        6 & Conv & \textbf{1.88883} & 3.3298 & \textbf{2.5386} & \textbf{2.7577} & \textbf{2.3894} \\
+        7 & LSTM & 2.02308 & 3.3601 & 2.5757 & 2.9328 & 2.6488 \\
+        8 & LSTM & 1.96090 & \textbf{3.0722} & 2.5637 & 2.8173 & 2.5134\\
+        9 & LSTM & 1.97469 & 3.5950 & 2.6007 & 2.8573 & 2.6239 \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -358,62 +359,92 @@ From the results, it is not immediately observable which architecture is optimal
 
 Obtained test results partly contain both ``good'' and ``bad'' predictions (i.e. in one part of a single test case, the predictions are good and in the other are not). Nevertheless, the general observation is that the obtained predictions suggest that multilayer perceptron architecture performs marginally worse than others and oscillate slightly more than the predictions made using the other two architectures. Moreover, by visual inspection of the obtained predictions shown in \cref{fig:Graphs}, it seems that they perform much worse than that the network test MAE suggests in Table \ref{tab:ResultsMover} suggest.
 
-When looking at RMSE values obtained on the test set along each of the principal axes, it may be concluded that networks with a smaller number of total trainable parameters generally perform better (not depending on architecture). This observation is likely due to simple input data (i.e., a small number of features). Nevertheless, even using this metric, the best architecture is still a convolutional network by a small margin (the smallest in terms of the number of trainable parameters among those trained). In addition, on most trained networks, the RMSE value along the $z$ axis is the smallest one, which is encouraging because the force component along the $z$ axis is usually a dominant component of the force vector in the dataset used for training and testing. For example, for the architecture with the best obtained RMSE, 6\% RMSE concerning the maximum force along the $z$ axis was achieved significantly better than 16\% and 12\% achieved along axes $x$ and $y$).
+When looking at RMSE values obtained on the test set along each of the principal axes, it may be concluded that networks with a smaller number of total trainable parameters generally perform better (not depending on architecture). This observation is likely due to simple input data (i.e., a small number of features). Nevertheless, even using this metric, the best architecture is still a convolutional network by a small margin (the smallest in terms of the number of trainable parameters among those trained). In addition, on most trained networks, the RMSE value along the $z$ axis is the smallest one, which is encouraging because the force component along the $z$ axis is usually a dominant component of the force vector in the dataset used for training and testing. For example, for the architecture with the best obtained RMSE, 6 \% RMSE concerning the maximum force along the $z$ axis was achieved significantly better than 16 \% and 12 \% achieved along axes $x$ and $y$).
 
 Based on these results, there is no clear-cut conclusion on which architecture is best for the task. However, architectures that consider input (measured) forces as time-series data have marginally better predictions. Please note that hyperparameter tuning for each of the architectures may provide somewhat better results. However, that would likely require a grid search approach to identify the optimal hyperparameters and a significant amount of time to train networks with all possible values of all chosen hyperparameters (i.e. the number of layers and the number of neurons per layers, activation function, optimiser, loss function).
 
-The results for the neural networks trained using data obtained on the Franka robot in the simulation are shown in  Table \ref{tab:ResultsFranka} with row numbers corresponding to the architectures from Table \ref{tab:NetworksFranka}. From the results, it is apparent that the performance of the Franka robot is significantly better, i.e., that force estimates are much more accurate. Furthermore, unlike the Mover6 robot, which provides only joint positions, the Franka robot state is abundant with other features besides joint positions: joint velocities, accelerations and torques. Thus, more features to learn from are available, and the inverse dynamics of the Franka robot can be captured more accurately. Moreover, since joint velocities and accelerations are inputs of any inverse dynamics model, it makes the accurate learning of inverse dynamics possible. However, please note that inverse dynamics is learnt implicitly using our approach as part of an end-to-end neural network for end-effector force estimation.
+The results for the neural networks trained using data obtained on the Franka robot in the simulation are shown in  Table \ref{tab:ResultsFranka} with row numbers corresponding to the architectures from Table \ref{tab:NetworksFranka}. 
+
+From the results, it is apparent that the performance of the Franka robot is significantly better, i.e., that force estimates are much more accurate. Furthermore, unlike the Mover6 robot, which provides only joint positions, the Franka robot state is abundant with other features besides joint positions: joint velocities, accelerations and torques. Thus, more features to learn from are available, and the inverse dynamics of the Franka robot can be captured more accurately. Moreover, since joint velocities and accelerations are inputs of any inverse dynamics model, it makes the accurate learning of inverse dynamics possible. However, please note that inverse dynamics is learnt implicitly using our approach as part of an end-to-end neural network for end-effector force estimation.
 
 \begin{table}
-    \caption[Networks performance and RMSE metric for Franka robot (simulation)]{Network fitness and RMSE metric for Franka robot in simulation}
+    \caption[Networks performance and RMSE metric for Franka robot (simulation)]{Network performance and RMSE metric for Franka robot in simulation}
     \label{tab:ResultsFranka}
     \centering
-    \begin{tabular}{cccc}
+    \begin{tabular}{ccccc}
         \toprule
-        \textbf{\#} & \textbf{Val. MSE} & \textbf{Test MSE} & \textbf{RMSE} \\
+        \textbf{No.} & \textbf{Architecture} & \textbf{Validation Loss} & \textbf{Test Loss} & \textbf{RMSE} \\
         \midrule
-        1. & 1.6544 & 1.6629 & 0.6871\\ % mlp_01
-        2. & 0.9637 & 0.9513 & 0.5036\\ % mlp_03
-        3. & 1.3130 & 1.2956 & 0.5440\\ % mlp_04
-        4. & 1.1958 & 1.1644 & 0.4673\\ % conv_01
-        5. & 1.3665 & 1.3101 & 0.5047\\ % conv_02
-        6. & 0.9462 & 0.9535 & 0.4637\\ % conv_03
-        7. & 0.4790 & 0.4590 & 0.3204\\ % lstm_03
-        8. & 0.4868 & 0.4776 & \textbf{0.2740}\\ % lstm_01
-        9. & 0.5422 & 0.5100 & 0.3224\\ % lstm_02
+        1 & MLP & 1.6544 & 1.6629 & 0.6871\\ % mlp_01
+        2 & MLP &  0.9637 & 0.9513 & 0.5036\\ % mlp_03
+        3 & MLP & 1.3130 & 1.2956 & 0.5440\\ % mlp_04
+        4 & Conv & 1.1958 & 1.1644 & 0.4673\\ % conv_01
+        5 & Conv & 1.3665 & 1.3101 & 0.5047\\ % conv_02
+        6 & Conv & 0.9462 & 0.9535 & 0.4637\\ % conv_03
+        7 & LSTM & 0.4790 & 0.4590 & 0.3204\\ % lstm_03
+        8 & LSTM & 0.4868 & 0.4776 & 0.2740\\ % lstm_01
+        9 & LSTM & 0.5422 & 0.5100 & 0.3224\\ % lstm_02
+        \midrule
+        10 $^*$ & LSTM & 0.1745 & 0.1690 & 0.1739 \\
+        11 $^\dagger$ & LSTM & 0.1322 & 0.1189 & \textbf{0.1428}\\
         \bottomrule
+        \multicolumn{5}{l}{\footnotesize{$^*$ Optimised architecture: three LSTM layers with 56, 48 and 16 cells, respectively }}\\
+        \multicolumn{5}{l}{\footnotesize{$^\dagger$ Optimised architecture: two LSTM layers with 64 and 56 cells, respectively}}
     \end{tabular}
 \end{table}
 
-It is also apparent from the obtained results that networks operating on sequential inputs perform better than multilayer perceptrons. However, contrary to \cref{tab:ResultsMover} for the Mover6 robot, LSTM networks have significantly better performance than convolutional (but, with the Mover6 robot, convolutional architectures had only marginally better performance). Moreover, including longer sequences of input data (five samples vs ten samples) improved performance. Finally, the inclusion of additional data about the robot state (this time those are joint torques) is also beneficial since it improved performance for each of the trained architectures compared with the performance of networks of the same architectures when those data were not used. Example force predictions from the test set using the trained networks are shown in \cref{fig:SimGraphs} (the architectures correspond to those defined in \cref{tab:NetworksFranka}.
+It is also noticeable from the obtained results that networks operating on sequential inputs perform better than multilayer perceptrons. However, contrary to \cref{tab:ResultsMover} for the Mover6 robot, LSTM networks have significantly better performance than convolutional (but, with the Mover6 robot, convolutional architectures had only marginally better performance). Moreover, including longer sequences of input data (five samples vs ten samples) improved performance. Finally, the inclusion of additional data about the robot state (this time those are joint torques) is also beneficial (as per RMSE metric) since it improved performance for each of the trained architectures compared with the performance of networks of the same architectures when those data were not used for about 15\%. Example force predictions from the test set using the trained networks are shown in \cref{fig:SimGraphs} (the architectures correspond to those defined in \cref{tab:NetworksFranka}.
 
 \begin{figure}
     \centering
-    \subfloat[Arch. \#2\label{fig:SimGraph01}]{
-        \includegraphics[width=0.47\textwidth]{slike/mdpi/sim_mlp03_006.png}
+    \subfloat[MLP (arch. \#2)\label{fig:SimGraph01}]{
+        \includegraphics[width=0.48\textwidth]{slike/mdpi/sim_mlp03_006.pdf}
     }
     \hfill
-    \subfloat[Arch. \#3\label{fig:SimGraph02}]{
-        \includegraphics[width=0.47\textwidth]{slike/mdpi/sim_mlp04_021.png}
+    \subfloat[MLP (arch. \#3)\label{fig:SimGraph02}]{
+        \includegraphics[width=0.48\textwidth]{slike/mdpi/sim_mlp04_021.pdf}
     }
     \vfill
-    \subfloat[Arch. \#4\label{fig:SimGraph03}]{
-        \includegraphics[width=0.47\textwidth]{slike/mdpi/sim_conv01_006.png}
+    \subfloat[Convolutional (arch. \#4)\label{fig:SimGraph03}]{
+        \includegraphics[width=0.48\textwidth]{slike/mdpi/sim_conv01_006.pdf}
     }
     \hfill
-    \subfloat[Arch. \#6\label{fig:SimGraph04}]{
-        \includegraphics[width=0.47\textwidth]{slike/mdpi/sim_conv03_021.png}
+    \subfloat[Convolutional (arch. \#6)\label{fig:SimGraph04}]{
+        \includegraphics[width=0.48\textwidth]{slike/mdpi/sim_conv03_021.pdf}
     }
     \vfill
-    \subfloat[Arch. \#7\label{fig:SimGraph05}]{
-        \includegraphics[width=0.47\textwidth]{slike/mdpi/sim_lstm03_006.png}
+    \subfloat[LSTM (arch. \#7)\label{fig:SimGraph05}]{
+        \includegraphics[width=0.48\textwidth]{slike/mdpi/sim_lstm03_006.pdf}
     }
     \hfill
-    \subfloat[Arch. \#9\label{fig:SimGraph06}]{
-        \includegraphics[width=0.47\textwidth]{slike/mdpi/sim_lstm02_021.png}
+    \subfloat[LSTM (arch. \#9)\label{fig:SimGraph06}]{
+        \includegraphics[width=0.48\textwidth]{slike/mdpi/sim_lstm02_021.pdf}
     }
     \caption{End-effector force predictions examples on test set for trained networks on Franka robot in simulation}
     \label{fig:SimGraphs}
+\end{figure}
+
+The performed hyperparameter optimisation yielded networks that produced somewhat better estimates, at the cost of increased training time, due to the networks with larger number of trainable parameters. The example estimates are shown in \cref{fig:SimOptimEE}. The optimised network network that used a dataset with joint torques performed better than one without it, according to the RMSE (0.1428 vs 0.1739). Additionally, from the figure, it can be seen that estimates are better for all three axes and errors are smaller than with the presented networks that were not optimised.
+
+\begin{figure}
+    \centering
+    \subfloat[Optimised LSTM (arch. \#10)]{
+        \includegraphics[width=0.48\textwidth]{slike/sim_optimee_006.png}
+    }
+    \hfill
+    \subfloat[Optimised LSTM (arch. \#10)]{
+        \includegraphics[width=0.48\textwidth]{slike/sim_optimee_021.png}
+    }
+    \vfill
+    \subfloat[Optimised LSTM (arch. \#11)]{
+        \includegraphics[width=0.48\textwidth]{slike/sim_optimee_jt_006.png}
+    }
+    \hfill
+    \subfloat[Optimised LSTM (arch. \#11)]{
+        \includegraphics[width=0.48\textwidth]{slike/sim_optimee_jt_021.png}
+    }
+    \caption[Examples of end-effector force predictions using the simulation data on test set for optimised LSTM architectures]{Examples of end-effector force predictions using the simulation data on test set for optimised LSTM architectures (examples are corresponding to ones in \cref{fig:SimGraphs})}
+    \label{fig:SimOptimEE}
 \end{figure}
 
 When comparing these results to Mover6 results, it is evident that Franka performs much better (evident both numerically in \cref{tab:ResultsFranka} and when comparing visually \cref{fig:Graphs,fig:SimGraphs}). This good performance might be because the data for training these networks were obtained in simulation, and the simulation is only an approximation of the real world, and it is expected that the simulation performs better than the real-world robot. Moreover, the Franka robot provides more information regarding the robot state (joint positions, velocities and torques vs joint positions only with Mover6 robot), and thus there are more features to train on, and consequently, the networks generalise better.
@@ -422,29 +453,20 @@ When comparing these results to Mover6 results, it is evident that Franka perfor
     \caption[Network fitness and RMSE metric for Franka robot (real world)]{Network fitness and RMSE metric for Franka robot in real world}
     \label{tab:ResultsFrankaReal}
     \centering
-    \begin{tabular}{|c|c|c|c|}
-        \hline
-        \textbf{\#} & \textbf{Val. MSE} & \textbf{Test MSE} & \textbf{RMSE} \\
-        \hline
-        \hline
-        1. & 6.0652 & 5.8790 & 1.3691 \\ % mlp_04
-        \hline
-        2. & 6.9703 & 6.9400 & 1.5304   \\ % mlp_05
-        \hline
-        3. & 6.4415 & 6.4206 & 1.5008 \\ % mlp_06
-        \hline
-        4. & 6.3967 & 6.5539 & 1.3432 \\ % conv_01
-        \hline
-        5. & 6.1087 & 6.2422 & \textbf{1.3203} \\ % conv_02
-        \hline
-        6. & 6.7443 & 6.4727 & 1.4648 \\ % conv_03
-        \hline
-        7. & 7.2168 & 6.9944 & 1.3963 \\ % lstm_01
-        \hline
-        8. & 7.5325 & 7.5721 & 1.5971 \\ % lstm_02
-        \hline
-        9. & 7.8321 & 7.7343 & 1.6111 \\ % lstm_03
-        \hline
+    \begin{tabular}{ccccc}
+        \toprule
+        \textbf{No.} & \textbf{Architecture} & \textbf{Validation Loss} & \textbf{Test Loss} & \textbf{RMSE} \\
+        \midrule
+        1 & MLP & 6.0652 & 5.8790 & 1.3691 \\ % mlp_04
+        2 & MLP & 6.9703 & 6.9400 & 1.5304   \\ % mlp_05
+        3 & MLP & 6.4415 & 6.4206 & 1.5008 \\ % mlp_06
+        4 & Conv & 6.3967 & 6.5539 & 1.3432 \\ % conv_01
+        5 & Conv & 6.1087 & 6.2422 & \textbf{1.3203} \\ % conv_02
+        6 & Conv & 6.7443 & 6.4727 & 1.4648 \\ % conv_03
+        7 & LSTM & 7.2168 & 6.9944 & 1.3963 \\ % lstm_01
+        8 & LSTM & 7.5325 & 7.5721 & 1.5971 \\ % lstm_02
+        9 & LSTM & 7.8321 & 7.7343 & 1.6111 \\ % lstm_03
+        \bottomrule
     \end{tabular}
 \end{table}
 
@@ -461,24 +483,22 @@ Similarly to the networks trained on simulation data, the networks were trained 
 
 \begin{figure}
     \centering
-    \subfloat[Arch. \#1\label{fig:RealGraph01}]{\includegraphics[width=0.45\columnwidth]{slike/franka_mlp04_003.png}}
+    \subfloat[MLP (arch. \#1)]{\includegraphics[width=0.48\columnwidth]{slike/franka_mlp04_003.png}}
     \hfil
-    \subfloat[Arch. \#2\label{fig:RealGraph02}]{\includegraphics[width=0.45\columnwidth]{slike/franka_mlp05_037.png}}
+    \subfloat[MLP (arch. \#2)]{\includegraphics[width=0.48\columnwidth]{slike/franka_mlp05_037.png}}
     \vfil
-    \subfloat[Arch. \#6\label{fig:RealGraph03}]{\includegraphics[width=0.45\columnwidth]{slike/franka_conv03_003.png}}
+    \subfloat[Convolutional (arch. \#6)]{\includegraphics[width=0.48\columnwidth]{slike/franka_conv03_003.png}}
     \hfil
-    \subfloat[Arch. \#4\label{fig:RealGraph04}]{\includegraphics[width=0.45\columnwidth]{slike/franka_conv01_037.png}}
+    \subfloat[Convolutional (arch. \#4)]{\includegraphics[width=0.48\columnwidth]{slike/franka_conv01_037.png}}
     \vfil
-    \subfloat[Arch. \#8\label{fig:RealGraph05}]{\includegraphics[width=0.45\columnwidth]{slike/franka_lstm02_003.png}}
+    \subfloat[LSTM (arch. \#8)]{\includegraphics[width=0.48\columnwidth]{slike/franka_lstm02_003.png}}
     \hfil
-    \subfloat[Arch. \#9\label{fig:RealGraph06}]{\includegraphics[width=0.45\columnwidth]{slike/franka_lstm03_037.png}}
+    \subfloat[LTSM (arch. \#9)]{\includegraphics[width=0.48\columnwidth]{slike/franka_lstm03_037.png}}
     \caption{End-effector force prediction examples using real-world data for Franka robot}
     \label{fig:RealGraphs}
 \end{figure}
 
-After a thorough analysis, it was concluded that the result discrepancies are the flaw of the hardware and not of the presented method. Moreover, in support of this conclusion, it was proved that the method was adequately performing when using data obtained in simulation for the same robot, the same experimental setup, and the same data preprocessing procedure. Therefore, these discrepancies might likely be due to the time-varying drift in the force-torque sensor on the robot tip measurements. One more argument favouring this conclusion is that using the similar experimental for joint torques estimation experiment, but without the sensor on the robot tip performed adequately, as reported in the following subsection.
-
-%Another thing that might have had a minor contribution to the issue is that the force sensor was mounted on the robot tip with the real-world setup. Since the sensor has its mass and inertia in the real world, the use on the robot tip changes the robot dynamics. However, this phenomenon does not occur in the simulation since those sensors do not have mass and inertia. 
+After a thorough analysis, it was concluded that the result discrepancies are the flaw of the hardware and not of the presented method. Moreover, in support of this conclusion, it was proved that the method was adequately performing when using data obtained in simulation for the same robot, the same experimental setup, and the same data preprocessing procedure. Therefore, these discrepancies might likely be due to the time-varying drift in the force-torque sensor on the robot tip measurements. One more argument favouring this conclusion is that using the similar experimental setup for joint torques estimation, but without the sensor on the robot tip performed adequately, as reported in the following subsection.
 
 \subsection{Joint torques estimation}
 \label{sec:ResJoint}
@@ -489,45 +509,43 @@ The obtained results regarding joint torque estimation are reported and summaris
     \centering
     \caption{Trained neural networks for joint torques estimation}
     \label{tab:NetworksFrankaTorqueRes}
-    \begin{tabular}{ccccc}
+    \begin{tabular}{cccccc}
         \toprule
-        \textbf{\#} & \textbf{Architecture} & \textbf{Dataset} & \textbf{Test loss} & \textbf{RMSE} \\
+        \textbf{No.} & \textbf{Architecture} & \textbf{Dataset} & \textbf{Validation Loss} & \textbf{Test Loss} & \textbf{RMSE} \\
         \midrule
-        1. & DeLaN & Sim (no ext.) & 1.6629 & 0.6871 \\ % lnn_prazni_02
-        2. & DeLaN & Sim (with ext.) & 1.2137 & 0.7475 \\ % lnn_teret_02
-        3. & MLP & Sim (with ext.) & 1.4076 & 1.0287 \\ % mlp_tau_01
-        4. & Conv & Sim (with ext.) & 1.1420 & 0.9144 \\ % conv_teret_torque_01
-        5. & LSTM & Sim (with ext.) & 0.6236 & \textbf{0.6189}\\ % lstm_teret_torque_01
+        1 & DeLaN & Sim (no ext.) & 0.6528 & 0.6826 & 0.5314 \\ % lnn_prazni_02
+        2 & DeLaN & Sim (with ext.) & 1.2333 & 1.2137 & 0.7475 \\ % lnn_teret_02
+        3 & MLP & Sim (with ext.) & 1.4070 & 1.4076 & 1.0287 \\ % mlp_tau_01
+        4 & Conv & Sim (with ext.) & 1.1439 & 1.1420 & 0.9144 \\ % conv_teret_torque_01
+        5 & LSTM & Sim (with ext.) & 0.6208 & 0.6236 & 0.6189\\ % lstm_teret_torque_01
         \midrule
-        6. & DeLaN & Real & 1.2398 & 0.8468\\ % lnn_franka_01
-        7. & MLP & Real & 1.8995 & 1.1567\\% mlp_franka_torque_01
-        8. & Conv & Real & 1.4837 & 0.9552\\ % conv_franka_torque_01
-        9. & LSTM & Real & 1.0385 &\textbf{0.7778}\\ % lstm_franka_torque_01
+        6 & DeLaN & Real & 1.3198 & 1.2398 & 0.8468\\ % lnn_franka_01
+        7 & MLP & Real & 1.9336 & 1.8995 & 1.1567\\% mlp_franka_torque_01
+        8 & Conv & Real & 1.4699 & 1.4837 & 0.9552\\ % conv_franka_torque_01
+        9 & LSTM & Real & 1.1643 & 1.0385 & 0.7778\\ % lstm_franka_torque_01
+        \midrule
+        10 $^*$ & LSTM & Sim (with ext.) & 0.1236 & 0.1234 & \textbf{0.2974}\\ % optim_torque_02
+        11 $^\dagger$ & LSTM & Real & 0.8989 & 0.9606 & \textbf{0.7369} \\ % optim_torque_franka_02
         \bottomrule
+        \multicolumn{6}{l}{\footnotesize{$^*$ Optimised architecture: two LSTM layers (64 and 56 cells), and two FC layers (16 and 48 neurons)}}\\
+        \multicolumn{6}{l}{\footnotesize{$^\dagger$ Optimised architecture: one LSTM layers (32 cells), and two FC layers (8 and 16 neurons)}}
     \end{tabular}
 \end{table}
 
 The torques were first estimated using DeLaN architecture, proposed in \cite{Lutter2019}. In that paper, the experiment that was conducted considered only four lower joints, since they ``dominate dynamics'' \cite{Lutter2019}. In our research, we trained the DeLaN network for all seven joints with the dataset that had no external forces acting and obtained reasonably good estimates, as shown in the two examples in \cref{fig:DeLaNRes}.
 
-%\begin{figure}
-    %\centering
-    %\subfloat{\includegraphics[width=0.45\textwidth]{slike/mdpi/prazni_delan_002.png}}
-    %\hfill
-    %\subfloat{\includegraphics[width=0.45\textwidth]{slike/mdpi/prazni_delan_013.png}}
-    %\caption{Example torque estimates using DeLaN architecture \emph{without} external forces acting}
-    %\label{fig:DeLaNRes}
-%\end{figure}
+From the \cref{fig:DeLaNRes}, it is evident that the primary source of inconsistency between the actual and estimated torque plots/trajectories are joints 1 and 7. However, their relative contribution to the total error differs since they pertain to different torque scales as depicted by the y-axis ranges in the figure.
 
-From the \cref{fig:DeLaNRes}, it is evident that the primary source of error is torque estimates for joints 1 and 7. Predictions for joint 1 are inaccurate due to peaks in torque in the moments the robot starts or stops moving, which could not be learnt easily by this architecture. Besides the rare peaks during the whole measurement sequence, joint torques for this joint have small values, and thus it seems like the network is filtering out the peaks. On the other hand, with joint 7, estimates are inconsistent, but this may not be a critical issue since this joint contributes least to the whole robot dynamics. Also, similarly to joint 1, the torque values are minimal, compared to torques for other joints (i.e., other joint torques are at least one order of magnitude higher, often more).
+Predictions for joint 1 are inaccurate due to peaks in torque in the moments the robot starts or stops moving, which could not be learnt easily by this architecture. Besides the rare peaks during the whole measurement sequence, joint torques for this joint have small values, and thus it seems like the network is filtering out the peaks. On the other hand, with joint 7, estimates are inconsistent, but this may not be a critical issue since this joint contributes least to the whole robot dynamics. Also, similarly to joint 1, the torque values are minimal, compared to torques for other joints (i.e., other joint torques are at least one order of magnitude higher, often more).
 
 When this architecture was trained on the dataset with external forces acting, the results were slightly worse: training and validation resulted in higher losses, and the estimates are not overlapping for the most part. The example is shown in \cref{fig:DeLaNResTeret}. The performance of this network is generally similar to the previous case, with observations about joints 1 and 7 holding. However, the estimates are somewhat less accurate with other joints than in the previous case. As it seems, when trained using a dataset with external forces, this network neglects external forces, i.e., the predictions are, as if there is no external force acting, which is especially visible in the estimates of joints 5 and 6, and on joint 4 to the lesser extent.
 
 \begin{figure}
     \centering
     %\subfloat{\includegraphics[width=0.45\textwidth]{slike/mdpi/teret_delan_005.png}}
-    \subfloat[Example from dataset \emph{without} external forces\label{fig:DeLaNResEmpty}]{\includegraphics[width=0.47\textwidth]{slike/mdpi/prazni_delan_002.png}}
+    \subfloat[Example from dataset \emph{without} external forces\label{fig:DeLaNResEmpty}]{\includegraphics[width=0.48\textwidth]{slike/mdpi/prazni_delan_002.pdf}}
     \hfill
-    \subfloat[Example from dataset \emph{with} external forces\label{fig:DeLaNResTeret}]{\includegraphics[width=0.47\textwidth]{slike/mdpi/teret_delan_007.png}}
+    \subfloat[Example from dataset \emph{with} external forces\label{fig:DeLaNResTeret}]{\includegraphics[width=0.48\textwidth]{slike/mdpi/teret_delan_007.pdf}}
     \caption{Example torque estimates using DeLaN architecture with different datasets}
     \label{fig:DeLaNRes}
 \end{figure}
@@ -536,9 +554,9 @@ Classical neural network architectures, especially LSTMs (which operate on seque
 
 \begin{figure}
     \centering
-    \subfloat[Convolutional network]{\includegraphics[width=0.47\textwidth]{slike/mdpi/teret_conv_005.png}}
+    \subfloat[Convolutional network]{\includegraphics[width=0.48\textwidth]{slike/mdpi/teret_conv_005.pdf}}
     \hfill
-    \subfloat[LSTM network]{\includegraphics[width=0.47\textwidth]{slike/mdpi/teret_lstm_005.png}}
+    \subfloat[LSTM network]{\includegraphics[width=0.48\textwidth]{slike/mdpi/teret_lstm_005.pdf}}
     \caption{Example torque estimates using classical architectures with simulation dataset}
     \label{fig:ConvLSTMResTeret}
 \end{figure}
@@ -547,22 +565,35 @@ The results obtained using data from the simulation are then compared to the one
 
 In \cref{fig:NetworksFrankaTorqueReal}, the analytical model (obtained in \cite{Gaz2019}) was included for comparison. However, please note that the analytical model does not take external forces into account. Thus, the presented neural networks have better estimates than the analytical model when an external force is applied. The measured torques are mostly in line with analytical torques, except in some joints (mostly joints 4-6) and only in parts when the external force is applied. Torques for joint 1 from the analytical model look noisy (which is not the case with neural network predictions). In contrast, torques for joint 7, the analytical model, has shown better performance than predictions of any of the presented networks, but still not performing well, which should not be the issue since the amplitudes are small compared to the other joints outlined before in the discussion. 
 
-Finally, it is essential to emphasise that the analytical model took almost three hours to compute the torques depicted in the figure, and the network evaluations took just about seconds. However, note that the analytical model was not optimised (a simple \emph{for} loop was used for the computations of each sample), and there is certainly possible that optimising it would take significantly less time to complete the calculations. However, it is expected that it will never outperform neural networks since the model is highly nonlinear.
+It is essential to emphasise that the analytical model took almost three hours to compute the torques depicted in the figure, and the network evaluations took just about seconds. However, note that the analytical model was not optimised (a simple \emph{for} loop was used for the computations of each sample), and there is certainly possible that optimising it would take significantly less time to complete the calculations. However, it is expected that it will never outperform neural networks since the model is highly nonlinear.
 
 \begin{figure}
     \centering
-    \subfloat[DeLaN]{\includegraphics[width=0.47\textwidth]{slike/mdpi/franka_delan_005.png}}
+    \subfloat[DeLaN]{\includegraphics[width=0.47\textwidth]{slike/mdpi/franka_delan_005.pdf}}
     \hfill
-    \subfloat[MLP]{\includegraphics[width=0.47\textwidth]{slike/mdpi/franka_mlp_005.png}}
+    \subfloat[MLP]{\includegraphics[width=0.47\textwidth]{slike/mdpi/franka_mlp_005.pdf}}
     \vfill
-    \subfloat[Convolutional network]{\includegraphics[width=0.47\textwidth]{slike/mdpi/franka_conv_005.png}}
+    \subfloat[Convolutional network]{\includegraphics[width=0.47\textwidth]{slike/mdpi/franka_conv_005.pdf}}
     \hfill
-    \subfloat[LSTM network]{\includegraphics[width=0.47\textwidth]{slike/mdpi/franka_lstm_005.png}}
+    \subfloat[LSTM network]{\includegraphics[width=0.47\textwidth]{slike/mdpi/franka_lstm_005.pdf}}
     \caption{Torque estimates on the real-world dataset compared with the analytical model}
     \label{fig:NetworksFrankaTorqueReal}
 \end{figure}
 
 These results again emphasise that the error in results obtained in the experiment on end-effector force estimation with real-world dataset are likely due to incorrect readings of the tip-mounted force sensor.
+
+In the case of joint torques estimation, hyperparameter optimisation was also performed using simulation and real-world datasets. Networks identified as best (among those considered during the optimisation process) had two LSTM layers with 64 and 56 cells, respectively, and two fully-connected layers with 16 and 48 neurons, respectively and ReLU activation function (for simulation dataset), and 1 LSTM layer with 32 cells and two fully-connected layers with 8 and 16 neurons (for real-world dataset). The simulation network performed significantly better than networks that were not optimised. This is especially evident in \cref{fig:JointTorqueOptim}, where significant improvements in the estimates for joints 1, 5, and 6 can be seen. Joint 1 peak predictions are now primarily correct, and joints 5 and 6 follow the measured values, thus reducing the error. The real-world optimised network performed only slightly better, and therefore RMSE is just marginally better than RMSE of the best network without optimisation.
+
+\begin{figure}
+    \centering
+    \subfloat[In simulation]{\includegraphics[width=0.48\textwidth]{slike/optim_torque02_006.png}}
+    \hfill
+    \subfloat[In real world]{\includegraphics[width=0.48\textwidth]{slike/optim_torque_franka02_005.png}}
+    \caption{Example joint torque estimates for optimised LSTM network}
+    \label{fig:JointTorqueOptim}
+\end{figure}
+
+If the proposed approach is to be applied in the real-world setting, especially for human-robot (force-based) interaction, the safety of the approach needs to be discussed (although not in the focus of this research). Assuming that the network was trained appropriately (with a sufficient amount and variety of data), additional potential sources of network malfunction (in terms of safety) could be faulty sensor readings and adversarial attacks on the network. Faulty sensor issues could be addressed by one of the fault diagnosis algorithms \cite{Li2020} (which include neural networks) before the data is fed to our network. Please note that this issue is present in all force measurement and estimation approaches regardless of which algorithm is being used. Adversarial attacks on convolutional networks are well documented, and known \cite{Heaven2019}, but these types of attacks are becoming more and more present in recurrent-type networks, including LSTM. Fortunately, countermeasures do exist \cite{Rosenberg2019} and could be deployed in real-world scenarios.
 
 In the final experiment on joint torques estimation, an array of strain gauge force sensors was used to replace the expensive (but reliable) 3-axis force-torque sensor. The goal was to assess if using multiple low-cost single axis-sensors can obtain comparable results to those obtained with a 3-axis force sensor. 
 
@@ -572,13 +603,13 @@ The obtained results in the experiment are presented in \cref{tab:NetworksFranka
     \centering
     \caption{Trained neural networks for joint torques estimation using strain gauges}
     \label{tab:NetworksFrankaTorqueSG}
-    \begin{tabular}{ccccc}
+    \begin{tabular}{cccccc}
         \toprule
-        \textbf{\#} & \textbf{Architecture} & \textbf{Dataset} & \textbf{Test loss} & \textbf{RMSE} \\
+        \textbf{\#} & \textbf{Architecture} & \textbf{Dataset} & \textbf{Validation Loss} & \textbf{Test Loss} & \textbf{RMSE} \\
         \midrule
-        1. & MLP & Real & 1.4113 & 1.0704\\% mlp_sg_01
-        2. & Conv & Real & 1.7227 & 1.2055\\ % conv_sg_01
-        3. & LSTM & Real & 0.9969 &\textbf{0.8931}\\ % lstm_sg_01
+        1. & MLP & Real & 1.4801 & 1.4113 & 1.0704\\% mlp_sg_02
+        2. & Conv & Real & 1.8613 & 1.7227 & 1.2055\\ % conv_sg_01
+        3. & LSTM & Real & 1.0927 & 0.9969 &\textbf{0.8931}\\ % lstm_sg_01
         \bottomrule
     \end{tabular}
 \end{table}

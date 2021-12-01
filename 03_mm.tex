@@ -1,11 +1,11 @@
 \chapter{MATERIALS AND METHODS}
 \label{chap:Materials}
 
-The research in this dissertation is about mobile robotic manipulators. As outlined in the literature review, the mobile manipulator can be controlled either jointly or as two separate systems: a mobile base and a robotic manipulator, the latter being a case in this dissertation. Thus, the research can be broadly divided into two parts, one tackling the navigation of mobile base and the other deals with the estimation of forces acting on the manipulator end-effector, since those forces are the key to successful completion of tasks in which the robot interacts with a human, other robot or anything in its environment. 
+The research in this dissertation deals with mobile robotic manipulators. As outlined in the literature review, the mobile manipulator can be controlled either as one coupled system or as two separate systems: a mobile base and a robotic manipulator, the latter being a case in this dissertation. Thus, the research can be broadly divided into two parts, one tackling the navigation of mobile base and the other deals with the estimation of forces acting on the manipulator end-effector, since those forces are the key to successful completion of tasks in which the robot interacts with a human, other robot or anything in its environment. 
 
-First, a neural network-based obstacle avoidance method was developed, as described in Section \ref{sec:MMAvoidance} \cite{Kruzic2020}, which is then used in the fusion scheme called \emph{mediation}, described in Section \ref{sec:MMMediation} \cite{Music2019}. Finally, approaches to manipulator end-effector force estimation and joint torque estimation based on deep neural networks are presented in Section \ref{sec:MMForceEstimation} \cite{Kruzic2020a}. In each section, a problem is formulated, and a method to solve the problem is given. The appropriate experiments were conducted to assess the viability and performance of the presented solutions to the problems in question.
+First, a neural network-based obstacle avoidance method was developed, as described in Section \ref{sec:MMAvoidance} \cite{Kruzic2020,Kruzic2018}, which is then used in the fusion scheme called \emph{mediation}, described in Section \ref{sec:MMMediation} \cite{Music2019}. Finally, approaches to manipulator end-effector force estimation and joint torque estimation based on deep neural networks are presented in Section \ref{sec:MMForceEstimation} \cite{Kruzic2020a,Kruzic2021}. In each section, a problem is formulated, and a method to solve the problem is given. The appropriate experiments were conducted to assess the viability and performance of the presented solutions to the problems in question.
 
-As neural networks were heavily used in the research, it is essential to emphasise methods and software used for their training. The training was conducted using Tensorflow 2 with Keras. All networks were initialised with a Glorot uniform initialiser \cite{Glorot2010}, and trained using Adam optimiser \cite{Kingma2014}, starting with a learning rate of 0.001. However, since the optimiser is adaptive, the learning rate changed during the training. The mean absolute error (MAE) and mean squared error (MSE) were used as loss functions in the training process, while ReLU and ELU functions were used for activating neurons. Finally, as a performance metric, the root-mean-squared error (RMSE) function was used. In all instances, the training lasted until there was no improvement in validation loss for five consecutive epochs. 
+As neural networks were heavily used in the research, it is essential to emphasise methods and software used for their training. The training was conducted using Tensorflow 2 with Keras. All networks were initialised with a Glorot uniform initialiser \cite{Glorot2010}, and trained using Adam optimiser \cite{Kingma2014}, starting with a learning rate of 0.001. However, since the optimiser is adaptive, the learning rate changed during the training. The mean absolute error (MAE) and mean squared error (MSE) were used as loss functions in the training process, while ReLU and ELU functions were used for activating neurons. Finally, as a performance metric, the root-mean-squared error (RMSE) function was used. In all instances, the training lasted until there was no improvement in validation loss for five consecutive epochs. For hyperparameter optimisation, Hyperband algorithm\cite{Li2018} was used, implemented in Keras Tuner, a part of Tensorflow-Keras framework.
 
 
 \section{Neural network-based obstacle avoidance for mobile robots}
@@ -13,9 +13,9 @@ As neural networks were heavily used in the research, it is essential to emphasi
 
 \subsection{Problem formulation}
 
-The goal of this part of the research was to develop a procedure to train and test an efficient neural network architecture for mobile robot obstacle avoidance while keeping human intervention as minimal as possible (i.e., self-supervised nature) \cite{Kruzic2020a}, and to deploy it onto the real-world robot. The approach should provide numerous positive and negative examples (crashes) to the learning algorithm but should safely do that for the robot and its environment.  It should also enable the collection of large amounts of data with minimal effort and cost. To that end, it was decided to use 2D LiDAR instead of a camera. Although cameras can provide much richer data than LiDAR, LiDAR is sufficient for obstacle avoidance. However, it should be kept in mind that LiDAR sensing can fail in some instances (e.g., in the presence of glass surfaces or if the distance is below or above the sensing threshold). Furthermore, the LiDAR output is less complex than the video stream, making the neural network architecture simpler and shorter training time. This less complex nature of input data has an attractive side effect that real-world measurements are more similar to simulation-based ones than in the case of a video stream. Finally, mass-produced and low-cost LiDARs are on the horizon, making them a logical choice for one of the mobile robot's primary sensors for the future.
+The goal of this part of the research was to develop a procedure to train and test an efficient neural network architecture for mobile robot obstacle avoidance while keeping human intervention as minimal as possible (i.e., self-supervised nature) \cite{Kruzic2020a}, and to deploy it onto the real-world robot. The approach should provide numerous positive and negative examples (crashes) to the learning algorithm but should safely do that for the robot and its environment.  It should also enable the collection of large amounts of data with minimal effort and cost. To that end, it was decided to use 2D LiDAR (laser distance sensor) instead of a camera. Although cameras can provide much richer data than LiDAR, LiDAR is sufficient for obstacle avoidance. However, it should be kept in mind that LiDAR sensing can fail in some instances (e.g., in the presence of glass surfaces or if the distance is below or above the sensing threshold). Furthermore, the LiDAR output is less complex than the video stream, making the neural network architecture simpler and shorter training time. This less complex nature of input data has an attractive side effect that real-world measurements are more similar to simulation-based ones than in the case of a video stream. Finally, mass-produced and low-cost LiDARs are on the horizon, making them a logical choice for one of the mobile robot's primary sensors for the future.
 
-There are two fundamental reasons why simulation was chosen for conducting this part of the research. The first one is that crashing a real robot into obstacles may damage both the robot and the environment. The other is that the usage of simulation makes possible the collection of large amounts of data with different crashing scenarios with minimal effort and negligible cost, yet achieving a high degree of similarity between data obtained in simulation compared to real-world data by using LiDAR sensor. An additional reason for using a simulation environment is that the whole approach (including neural networks) can be fine-tuned in simulation and deployed only when an acceptable level of performance is achieved (as was done in the research).
+There are two fundamental reasons why simulation was chosen for conducting this part of the research. The first one is that crashing a real robot into obstacles may damage both the robot and the obstacle. The other is that the usage of simulation makes possible the collection of large amounts of data with different crashing scenarios with minimal effort and negligible cost, yet achieving a high degree of similarity between data obtained in simulation compared to real-world data by using LiDAR sensor. An additional reason for using a simulation environment is that the whole approach (including neural networks) can be fine-tuned in simulation and deployed only when an acceptable level of performance is achieved (as was done in the research).
 
 Differences between the simulated camera and LiDAR compared to the real-world camera and LiDAR data are illustrated in Figure \ref{fig:Fig01}. From the figure, it can be seen that differences exist between the simulation and real-world cases both for LiDAR and camera. However, due to different lighting conditions (which are difficult to reproduce in simulation) and the existence of textures and shadows, the image-based comparison produces more significant discrepancies than the LiDAR-based one. Please note that the same distance from the robot to obstacles was used in both scenarios. It should be noted that recently approach which uses simple graphics (i.e., not photorealistic) but with a substantial number of variations in light and texture (for better generalisation) have been investigated, and good results reported in the domain of robotic grasping \cite{Bousmalis2018}.
 
@@ -36,7 +36,7 @@ Please note that, although simulation-based neural network training approaches d
 
 \subsection{Data collection and labelling}
 
-Training data for obstacle avoidance was generated and collected in Gazebo simulation environment \cite{Koenig2004} as follows. First, a simulation was automatically initialised, and various obstacles were randomly scattered within it, as is shown in Figure \ref{fig:Fig02}. The dimensions of the simulated environment were always kept the same (12.5 m $\times$ 12.5 m) but can be freely chosen/changed by the user. Then, the robot was spawned in its centre with random orientation and was given a constant linear velocity of 0.4 m/s. While the robot was in motion, LiDAR data were collected. The recording was carried out until the robot crashed into the obstacle or the perimeter wall.
+Training data for obstacle avoidance was generated and collected in Gazebo simulation environment \cite{Koenig2004} as follows. First, a simulation was automatically initialised, and various obstacles were randomly scattered within it, as is shown in Figure \ref{fig:Fig02}. The dimensions of the simulated environment were always kept the same (12.5 m $\times$ 12.5 m) but can be freely chosen/changed by the user. Then, the robot was spawned in its centre with random orientation and was given a constant linear velocity of 0.4 m/s. While the robot was in motion, LiDAR data were collected. The recording was carried out until the robot crashed into the obstacle or the perimeter wall (detected by the simulation engine).
 
 \begin{figure}
     \centering
@@ -164,7 +164,7 @@ The results of this experiment were given and analysed in Section \ref{Sec:ResLa
 
 The first experiment was conducted in simulation in four random environments that were generated the same way as were those used for collecting training data and shown in Figure \ref{fig:Fig02}. There were five test runs in each of the environments (20 test runs in total). Each run began with the robot in the centre with a random orientation. It lasted until the robot crashed into the obstacle, or a maximum time limit of 10 minutes was reached.
 
-The second simulation experiment was straightforward and was conducted in a small 5 m x 5 m environment with a single moving obstacle, as depicted in Figure \ref{fig:Fig07}. The robot was left for 10 minutes to roam around the environment. The experiment was run four times, each time with a different (but constant) obstacle velocity (0.1 m/s, 0.2 m/s, 0.4 m/s and 0.8 m/s; please note that in the Figure \ref{fig:Fig07}, the obstacle moved back and forth in the directions indicated by the arrows). 
+The second simulation experiment was straightforward and was conducted in a small 5 m x 5 m environment with a single moving obstacle, as depicted in Figure \ref{fig:Fig07}. The robot was left for 10 minutes to roam around the environment. The experiment was run four times, each time with a different (but constant) obstacle velocity (0.1 m/s, 0.2 m/s, 0.4 m/s and 0.8 m/s; please note that in the Figure \ref{fig:Fig07}, the obstacle moved left and right in the directions indicated by the arrows). 
 
 \begin{figure}
     \centering
@@ -175,7 +175,7 @@ The second simulation experiment was straightforward and was conducted in a smal
 
 \subsubsection{Real-world experiments}
 
-The experiments in the real world were conducted using a real robot, a heavily modified Turtlebot 2 mobile robot (shown in Figure \ref{fig:Fig08}), with a LiDAR sensor mounted on-board. The 2D LiDAR used was Rplidar-A1M8, which has a resolution of 1 degree (i.e., gives 360 points per measurement cycle) and run with a 7 Hz rotation frequency. 
+The experiments in the real world were conducted using a real robot, a heavily modified Turtlebot 2 mobile robot (shown in Figure \ref{fig:Fig08}), with a LiDAR sensor mounted on-board. The 2D LiDAR used was Rplidar-A1M8, which has a resolution of 1 degree (i.e., gives 360 points per measurement cycle) and run with a 7 Hz rotation frequency and a distance range of 6 m. 
 
 \begin{figure}
     \centering
@@ -453,7 +453,7 @@ Commonplace Robotics Mover6 robot is a six-degree-of-freedom robot intended prim
     \label{fig:Mover6}
 \end{figure}
 
-Unfortunately, the manufacturer did not provide the dynamics model or any relevant data that makes the computation of the dynamic model possible. Furthermore, the manufacturer declared that the robot has a payload of only 0.4 kg, which makes the use of wrist-mounted force sensors inconvenient due to their mass, consuming the majority of the payload. Thus, for this experiment, an auxiliary interaction tool was devised to make a direct measurement of end-effector forces possible, as depicted in Fig. \ref{fig:Tool}. The tool features a hemispheric dome placed on the force sensor to focus forces and has Optotrak markers. It was held by the experimenter who applied the force to the robot end-effector, as illustrated in Fig. \ref{fig:Robot}. 
+Unfortunately, the manufacturer did not provide the dynamics model or any relevant data that makes the computation of the dynamic model possible. Furthermore, the manufacturer declared that the robot has a payload of only 0.4 kg, which makes the use of wrist-mounted force sensors inconvenient due to their mass, consuming the majority of the payload. Thus, for this experiment, an auxiliary interaction tool was devised to make a direct measurement of end-effector forces possible, as depicted in Fig. \ref{fig:Tool}. The tool featured a hemispheric dome placed on the force sensor to focus forces and had Optotrak markers, based on which its orientation was determined. It was held by the experimenter who applied the force to the robot end-effector, as illustrated in Fig. \ref{fig:Robot}. 
 
 \begin{figure}
     \centering
@@ -462,7 +462,7 @@ Unfortunately, the manufacturer did not provide the dynamics model or any releva
     \label{fig:Tool}
 \end{figure}
 
-The robot executed random valid trajectories in the process. The other force sensor was mounted below the robot base. Both sensors were JR3 90M40 6-axis force-torque sensors, and data acquisition was made using Mathworks Simulink Real-Time 2019a software which also synchronised sensors at a rate of 100 Hz. Additionally, Optotrak Certus optical motion capture system was used for assessing the positions and orientations of the robot base and the interaction tool. The position data measurements were synchronised with force measurements. Robot joint positions that are provided by encoders on each of the joints were also recorded.
+The robot executed random valid trajectories in the process. The other force sensor was mounted below the robot base. Both sensors were JR3 90M40 6-axis force-torque sensors, and data acquisition was made using Mathworks Simulink Real-Time 2019a software which also synchronised sensors at a rate of 100 Hz. Additionally, Optotrak Certus optical motion capture system was used for assessing the positions and orientations of the robot base and the interaction tool through measuring the 3D positions of optical markers. The position data measurements were synchronised with force measurements. Robot joint positions that are provided by encoders on each of the joints were also recorded.
 
 \begin{figure}
     \centering
@@ -499,29 +499,40 @@ where $A_i$, $\tau_i$ and $\sigma_i$ are amplitude, time offset and standard dev
     \label{fig:Bell}
 \end{figure}
 
-There were 1000 measurement instances with between 5 and 50 valid trajectories executed in each. Between the execution of trajectories, there was a 1-second standstill. A total of 3,919,800 samples were collected, which took about 48 hours in simulation on a computer with an Intel Core i3-6100 processor with 16 GB RAM, but in practice, that was a shorter time since simulation runs faster than real-time. An example of simulation running using the described experimental setup with four visualised trajectories and plotted forces on base and tip is shown in \cref{fig:Coppelia}. Please note that periods may exist without an external force acting on the end-effector during the execution of the trajectories. This way, the dataset was made more diverse in order to generalise better. 
-
 The dynamic model of the robot that the simulation was based on was provided in \cite{Gaz2019}, and as a simulation environment, CoppeliaSim (formerly known as V-REP) \cite{Rohmer2013} was used.
+
+There were 1000 measurement instances with between 5 and 50 valid trajectories executed in each. For trajectory generation, first, a valid goal was generated randomly (uniform, in joint space), then a trajectory to that goal from the present robot state was planned using Open Planning Library \cite{Sucan2012} and its default planning algorithm, the Rapidly-exploring Random Tree (RRT) Connect algorithm. If no trajectory was found, the procedure was repeated until a valid trajectory was found. Between the execution of trajectories, there was a 1-second standstill. 
+
+The dataset was split in the following manner. The test set was created using randomly selected 20\% of data instances, while 80\% was used for training and validation purposes. Further random 20\% (or 16\% in terms of total data instances) was used as a validation set, while the rest was used as a training set. With this in mind, the training set consisted of 640 simulation instances, a validation set of 160 simulation instances and a test set of 200 simulation instances.
+
+A total of 3,919,800 samples were collected, which took about 48 hours in simulation on a computer with an Intel Core i3-6100 processor with 16 GB RAM, but in practice, that was a shorter time since simulation runs faster than real-time. The simulation engine used for the simulations was provided by the CoppeliaSim environment, and it was the Newton Dynamics engine \cite{Massera2007}. The simulation step was set to 50 ms. An example of simulation running using the described experimental setup with four visualised trajectories and plotted forces on base and tip is shown in \cref{fig:Coppelia}. Please note that periods may exist without an external force acting on the end-effector during the execution of the trajectories. This way, the dataset was made more diverse in order to generalise better. 
 
 \begin{figure}
     \centering
-    \includegraphics{slike/mdpi/coppelia_crop.png}
-    \caption{CoppeliaSim with four visualised trajectories during the running simulation}
+    \subfloat[CoppeliaSim with four visualised trajectories]{\includegraphics[width=0.35\textwidth]{slike/coppelia.png}}
+    \hfill
+    \subfloat[Corresponding three force interactions for the visualised trajectories]{\includegraphics[width=0.55\textwidth]{slike/forces.png}}
+    \caption{Example of the running simulation}
     \label{fig:Coppelia}
 \end{figure}
 
 Another set of data was collected along with these data in simulation, with the same simulation-based setup except that no external forces were acting on the robot end-effector. The intention was to apply the approach introduced in \cite{Lutter2019} to learn the robot's inverse dynamics accurately, but it requires that no external forces are acting on the robot.
 
-Following the data collection on the Franka robot in simulation, the data were also collected in the same setup using a real-world Franka robot to compare with the results obtained in simulation. The setup is shown in Figure \ref{fig:FrankaExp}. It features two force sensors: one was mounted under the robot base (Kistler 9257A sensor with Kistler 5070A charge amplifier and NI USB-6009 A/D converter for data acquisition)), and the other was mounted on the robot wrist (Hypersen FT-060 with built-in A/D converter and data acquisition over UDP), while the gripper was removed. The robot controller provided data about the robot state (joint positions, velocities and torques), while the forces (on base and wrist) force were measured directly using sensors.
+Following the data collection on the Franka robot in simulation, the data were also collected in the same setup using a real-world Franka robot to compare with the results obtained in simulation. The setup is shown in Figure \ref{fig:FrankaExp}. It features two force sensors: one was mounted under the robot base (Kistler 9257A sensor with Kistler 5070A charge amplifier and NI USB-6009 A/D converter for data acquisition)), and the other was mounted on the robot wrist (Hypersen FT-060 with built-in A/D converter and data acquisition over UDP), while the gripper was removed. Spatial calibration between the robot’s base and Kistler 9257A sensor (i.e., two coordinate frames in \cref{fig:FrankaExpSetup}) was achieved manually. The robot controller provided data about the robot state (joint positions, velocities and torques), while the forces (on base and wrist) force were measured directly using sensors.
+
+Special consideration was given to interconnection between the robot base, Kistler force sensor underneath it and the environment to ensure the stability and repeatability of robot motion. This is more closely depicted in \cref{fig:FrankaBase}. The robot base was attached at four points defined by the manufacturer via bolts to the rigid aluminium sheet of 280x280x12 mm dimensions. This was then secured to the sensor top surface at predefined attachment points with sink-in head screws so that the robot lies flat on the aluminium plate. This was then attached to the aluminium sheet of 280x280x12 mm dimensions to provide extra stability when attaching it to the environment (e.g., floor). It should be noted that special care was given to robot pose positioning relative to the sensor surface underneath to place as large as possible robot base footprint over it and ensure that in the initial configuration, the whole system was balanced (i.e., even without the bolts and screws).
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\textwidth]{slike/franka_exp.png}
-    \caption{Real Franka robot experimental setup for force estimation}
+    \subfloat[Franka robot during measurements with installed sensor under the base\label{fig:FrankaExpSetup}]{\includegraphics[width=0.45\textwidth]{slike/franka_exp.png}}
+    \hfill
+    \subfloat[Interconnection between the robot base, force sensor and the environment\label{fig:FrankaBase}]{\includegraphics[width=0.45\textwidth]{slike/mdpi/franka_baza.png}}
+    \caption{Real-world experimental setup with Franka robot}
     \label{fig:FrankaExp}
 \end{figure}
 
 \subsection{Neural networks for end-effector force estimation}
+\label{sec:MMNNEE}
 
 Several neural networks of different types of architectures were trained with varying hyperparameters. The overview of the trained neural networks with their respective hyperparameters is summarised in Table \ref{tab:NetworksMover} using the data obtained on Mover 6 robot. The inputs to the network were the forces measured using the sensor mounted under the robot base, possibly with the inclusion of joint positions, as indicated in the table. The outputs were the forces measured using the sensor mounted on the interaction device. Please note that MLP networks have a higher number of neurons per layer than other architectures, which is based on previous experience in the field and on the fact that MLP does the learning on raw input data rather than temporal features (which is the case with convolutional and LSTM networks), and thus need more neurons to generalise appropriately. In convolutional and LSTM networks, a single 1D convolution or LSTM layer was used at the beginning of the network, reasoning that a single layer is enough for the data of relatively low dimensionality and complexity to extract temporal features. Therefore, the number of units in those layers was fixed to 8 for all training instances. 
 
@@ -531,17 +542,17 @@ Several neural networks of different types of architectures were trained with va
     \label{tab:NetworksMover}
     \begin{tabular}{cccccc}
         \toprule
-        \textbf{\#} & \textbf{Architecture} & \textbf{Joint pos.} & \textbf{FC Layers}\tablefootnote{Fully connected layers} & \textbf{Neurons} & \textbf{Seq. length}  \\
+        \textbf{No.} & \textbf{Architecture} & \textbf{Joint pos.} & \textbf{FC Layers}\tablefootnote{Fully connected layers} & \textbf{Neurons} & \textbf{Seq. length}  \\
         \midrule
-        1. & MLP & No & 3 & 64 & / \\ % mlp_01
-        2. & MLP & Yes & 3 & 64 & / \\ % mlp_02
-        3. & MLP & Yes & 2 & 32 & / \\ % mlp_03
-        4. & Conv & No & 3 & 32 & 10 \\ % conv_01
-        5. & Conv & Yes & 2 & 16 & 10\\ % conv_02
-        6. & Conv & Yes & 2 & 16 & 5 \\ % conv_03
-        7. & LSTM & No & 2 & 16 & 10 \\ % lstm_01
-        8. & LSTM & Yes & 2 & 16 & 10 \\ % lstm_02
-        9. & LSTM & Yes & 2 & 16 & 5\\ % lstm_03
+        1 & MLP & No & 3 & 64 & / \\ % mlp_01
+        2 & MLP & Yes & 3 & 64 & / \\ % mlp_02
+        3 & MLP & Yes & 2 & 32 & / \\ % mlp_03
+        4 & Conv & No & 3 & 32 & 10 \\ % conv_01
+        5 & Conv & Yes & 2 & 16 & 10\\ % conv_02
+        6 & Conv & Yes & 2 & 16 & 5 \\ % conv_03
+        7 & LSTM & No & 2 & 16 & 10 \\ % lstm_01
+        8 & LSTM & Yes & 2 & 16 & 10 \\ % lstm_02
+        9 & LSTM & Yes & 2 & 16 & 5\\ % lstm_03
         \bottomrule
     \end{tabular}
 \end{table}
@@ -552,28 +563,57 @@ Additionally, in convolutional and LSTM networks, a single layer extracted tempo
 
 The expectation is that neural networks will capture Franka robot dynamics more accurately due to additional features provided as inputs when compared to Mover6 that provides fewer features to learn on.
 
+Following these networks, two more networks were obtained using parameter optimisation to obtain more accurate estimates. The optimised hyperparameters were the number of LSTM layers, the number of LSTM units per layer, the number of fully connected layers, the number of units per layer, and the activation function. These networks are included in the table and are marked appropriately. Contrary to the others, they have two LSTM layers with 32 units each and use ReLU as an activation function. These networks are the best-performing ones selected during the optimisation process amongst those considered, with different values of hyperparameters.
+
 \begin{table}
     \centering
     \caption{Trained neural networks for force estimation with selected hyperparameters for Franka robot}
     \label{tab:NetworksFranka}
     \begin{tabular}{cccccc}
         \toprule
-        \textbf{\#} & \textbf{Architecture} & \textbf{Joint torques} & \textbf{FC Layers} & \textbf{Neurons} & \textbf{Seq. length}  \\
+        \textbf{No.} & \textbf{Architecture} & \textbf{Joint torques} & \textbf{FC Layers} & \textbf{Neurons} & \textbf{Seq. length}  \\
         \midrule
-        1. & MLP & No & 2 & 32 & / \\ % mlp_01
-        2. & MLP & Yes & 2 & 32 & / \\ % mlp_03
-        3. & MLP & Yes & 2 & 16 & / \\ % mlp_04
-        4. & Conv & No & 2 & 16 & 10 \\ % conv_01
-        5. & Conv & No & 2 & 16 & 5\\ % conv_02
-        6. & Conv & Yes & 2 & 16 & 5 \\ % conv_03
-        7. & LSTM & No & 2 & 16 & 10 \\ % 
-        8. & LSTM & Yes & 2 & 16 & 10 \\ % 
-        9. & LSTM & Yes & 2 & 16 & 5\\ % 
+        1 & MLP & No & 2 & 32 & / \\ % mlp_01
+        2 & MLP & Yes & 2 & 32 & / \\ % mlp_03
+        3 & MLP & Yes & 2 & 16 & / \\ % mlp_04
+        4 & Conv & No & 2 & 16 & 10 \\ % conv_01
+        5 & Conv & No & 2 & 16 & 5\\ % conv_02
+        6 & Conv & Yes & 2 & 16 & 5 \\ % conv_03
+        7 & LSTM & No & 2 & 16 & 10 \\ % 
+        8 & LSTM & Yes & 2 & 16 & 10 \\ % 
+        9 & LSTM & Yes & 2 & 16 & 5\\ % 
+        \midrule
+        10 $^*$ & LSTM & No & 2 & 16 & 10\\
+        11 $^\dagger$ & LSTM & Yes & 2 & 16, 48 & 10 \\
+        \bottomrule
+        \multicolumn{6}{l}{\footnotesize{$^*$ Optimised architecture: three LSTM layers with 56, 48 and 16 cells, respectively }}\\
+        \multicolumn{6}{l}{\footnotesize{$^\dagger$ Optimised architecture: two LSTM layers with 64 and 56 cells, respectively}}
+    \end{tabular}
+\end{table}
+
+% PROMJENA OD OPTIMIZACIJE
+The goal of training different architectures of neural networks with different hyperparameters was not to identify the optimal hyperparameters or architecture. Instead, the main goal was to identify what architecture is best-suited for the problem at hand and whether the inclusion of additional information provided by the robot as inputs (in our case, joint torques) significantly affects the performance of the neural networks.
+
+Thus, only a relatively small-scale hyperparameter optimisation was conducted to assess if there was some improvement in network performance. Therefore, after training the networks from \cref{tab:NetworksFranka}, the hyperparameter optimisation was performed. However, please note that optimisation was only performed for LSTM architecture, since it was identified as the best-performing one, which is shown later on in \cref{sec:ResultsEE}. Hyperparameters that were optimised were: activation function, number of LSTM layers and number of cells per each layer, number of dense layers and number of neurons per each layer. The hyperparameters search space was thus summarised in \cref{tab:HPSearchSpace}.
+
+\begin{table}
+    \centering
+    \caption{Hyperparameters search space}
+    \label{tab:HPSearchSpace}
+    \begin{tabular}{ll}
+        \toprule
+        \textbf{Hyperparameter} & \textbf{Possible values}\\
+        \midrule
+        Activation function & ReLU, ELU, Tanh \\
+        Number of LSTM layers & 1 -- 3 \\ % mlp_03
+        Number of cells per LSTM layer & 8 -- 64, step 8 \\ % mlp_04
+        Number of FX layers & 2 -- 4 \\ % conv_01
+        Number of neurons per FC layer & 8 -- 64, step 8 \\ % conv_02
         \bottomrule
     \end{tabular}
 \end{table}
 
-The goal of training different neural networks architectures with different hyperparameters was not to identify optimal hyperparameters; it is virtually impossible due to many possible combinations. Instead, the goal was to see what architecture is best suited for the problem at hand and does the inclusion of additional information provided by the robot as inputs (in our case, joint positions for the Mover6 robot and joint torques for the Franka robot) significantly affects the performance of the neural networks.
+The results of hyperparameter optimisation is given and discussed in \cref{sec:ResultsEE}.
 
 \subsection{Neural networks for joint torques estimation}
 
@@ -584,7 +624,7 @@ The inverse dynamic model is derived from the Euler-Lagrange equation as
     \vtau=\mH(\vq)\ddot{\vq}+\vc(\vq,\dot{\vq})+\vg(\vq)+\vtau_f(\dot{\vq})
     \label{eq:InvDyn}
 \]
-where $\mH$ is the mass matrix, $\vc$ is a term describing centripetal and Coriolis forces, $\vg$ is the gravity term, $\vtau_f$ is the torque due to friction, and $\vtau$ is the vector of joint-side torques. These quantities are dependent on either joint positions $\vq$ or joint velocities $\dot{\vq}$ (or both), and all these data are available in the simulation datasets. This experiment differed from the previous in that the neural network outputs were joint torques instead of end-effector forces.
+where $\mH$ is the mass matrix, $\vc$ is a term describing torques due to centripetal and Coriolis forces, $\vg$ is the gravity term, $\vtau_f$ is the torque due to friction, and $\vtau$ is the vector of joint-side torques. These quantities are dependent on either joint positions $\vq$ or joint velocities $\dot{\vq}$ (or both), and all these data are available in the simulation datasets. This experiment differed from the previous in that the neural network outputs were joint torques (internal measurements provided by the robot controller) instead of end-effector forces.
 
 For this experiment, neural networks were trained with simulation data and with real-world data. Please note that in this experiment, the force sensor was mounted under the robot base between two aluminium plates, as before, and shown in \cref{fig:FrankaTorqueSetup}. However, although the experimental setup for this experiment is similar to the previous one (same robot, same sensor under the robot base), the difference is that this time no force sensor was mounted at the robot's tip.
 
@@ -603,25 +643,29 @@ Architectures of trained networks for joint torques estimation are shown in \cre
     \label{tab:NetworksFrankaTorque}
     \begin{tabular}{cccc}
         \toprule
-        \textbf{\#} & \textbf{Architecture} & \textbf{Dataset} & \textbf{External forces} \\
+        \textbf{No.} & \textbf{Architecture} & \textbf{Dataset} & \textbf{External forces} \\
         \midrule
-        1. & DeLaN & Simulation & No \\ % lnn_prazni_02
-        2. & DeLaN & Simulation & Yes \\ % lnn_teret_02
-        3. & MLP & Simulation & Yes \\ % mlp_tau_01
-        4. & Conv & Simulation & Yes\\ % conv_teret_torque_01
-        5. & LSTM & Simulation & Yes \\ % lstm_teret_torque_01
+        1 & DeLaN & Simulation & No \\ % lnn_prazni_02
+        2 & DeLaN & Simulation & Yes \\ % lnn_teret_02
+        3 & MLP & Simulation & Yes \\ % mlp_tau_01
+        4 & Conv & Simulation & Yes\\ % conv_teret_torque_01
+        5 & LSTM & Simulation & Yes \\ % lstm_teret_torque_01
         \midrule
-        6. & DeLaN & Real world & Yes \\ % lnn_franka_01
-        7. & MLP & Real world & Yes\\% mlp_franka_torque_01
-        8. & Conv & Real world & Yes\\ % conv_franka_torque_01
-        9. & LSTM & Real world & Yes\\ % lstm_franka_torque_01
+        6 & DeLaN & Real world & Yes \\ % lnn_franka_01
+        7 & MLP & Real world & Yes\\% mlp_franka_torque_01
+        8 & Conv & Real world & Yes\\ % conv_franka_torque_01
+        9 & LSTM & Real world & Yes\\ % lstm_franka_torque_01
         \bottomrule
     \end{tabular}
 \end{table}
 
 Please note that this experiment could not be conducted on the Mover6 robot since the robot's controller does not provide joint torques, which are used as network outputs in this approach.
 
-As a final experiment on joint torques estimation, the base-mount force sensor was replaced by four single-axis force sensors. These low-cost sensors are based on strain gauges and are shown in \cref{fig:StrainGauge}. They were put into a rectangular configuration shown in \cref{fig:Platform}, on top of which an aluminium plate with a robot mounted on it was put. This experiment was conducted only using a real-world Franka robot since these sensors are not available in the simulation. Data acquisition was based on an HX711 24-bit A/D converter and Arduino Uno (the same Arduino board was used to acquire data from all the sensors).
+% NOVO OPTIMIZACIJA
+Finally and similarly to the previous experiment, a hyperparameter optimisation procedure was performed to assess if there was some improvement in the performance of the networks. The search space was the same as one in \cref{sec:MMNNEE}, while the results are presented and discussed in \cref{sec:ResJoint}.
+% NOVO KRAJ
+
+As a final experiment on joint torques estimation, the base-mount force sensor was replaced by four single-axis force sensors. These low-cost sensors were based on strain gauges and are shown in \cref{fig:StrainGauge}. They were put into a rectangular configuration shown in \cref{fig:Platform}, on top of which an aluminium plate with a robot mounted on it was put. This experiment was conducted only using a real-world Franka robot since these sensors are not available in the simulation. Data acquisition was based on an HX711 24-bit A/D converter and Arduino Uno (the same Arduino board was used to acquire data from all the sensors).
 
 The procedure of collecting data was the same as in previous experiments, where the experimenter applied the force to the robot end-effector (\cref{fig:FrankaTorqueSetup}). However, please note that in this experiment, the dataset was not as extensive and as diverse as in the previous since the goal was to assess the possibility of using multiple low-cost and simple sensors to achieve comparable performance to one using a 3-axis force sensor (which was used in previous experiments).
 
