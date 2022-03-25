@@ -7,16 +7,16 @@ The results obtained in the experiments show that the neural networks for obstac
 
 \subsection{Parameters identification experiment}\label{Sec:ResLabelling}
 
-The first thing to notice in this experiment is that, by using datasets created by using different parameters for the number of LiDAR points and thresholds, the ratio between numbers of positive and negative training samples is different, although the same raw data are used. That is because, when using lower threshold values, the robot can come closer to the obstacle and for that reason, there are more positive samples than higher threshold values. Similar reasoning can be applied to the other parameter in question, the number of points needed to classify a sample as negative. Note that positive samples likely won't result in a crash, while negative samples would result in a collision. This parameter also had a significant impact on the imbalance between the positive and negative samples in the dataset since the number of points is a crucial parameter to decide if something is an obstacle or not. The ratios between positive and negative samples as a function of these parameters are shown in \cref{fig:Brojevi}. Finally, please note that data in the figure is for the neural network for moving forward; similar trends emerge for neural networks for going left and right.
+The first thing to notice in this experiment is that, by using datasets created by using different parameters for the number of LiDAR points and thresholds, the ratio between numbers of positive (no crash) and negative (crash or short period that precedes the crash) training samples is different, although the same raw data are used. That is because, when using lower threshold values, the robot can come closer to the obstacle and for that reason, there are more positive samples than with higher threshold values. Similar reasoning can be applied to the other parameter in question, the number of points needed to classify a sample as negative. Note that positive samples likely won't result in a crash, while negative samples would result in a collision. This parameter also had a significant impact on the imbalance between the positive and negative samples in the dataset since the number of points is a crucial parameter to decide if something is an obstacle or not. The ratios between positive and negative samples as a function of these parameters are shown in \cref{fig:Brojevi}. Finally, please note that data in the figure is for the neural network for moving forward; similar trends emerge for neural networks for going left and right.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{slike/brojevi}
+\includegraphics[width=0.9\textwidth]{slike/Fig04_01.png}
 \caption{The number of positive and negative samples per dataset}
 \label{fig:Brojevi}
 \end{figure}
 
-It was also observed that there were more crash events for datasets created with threshold parameter values of 0.4 m and 0.6 m than with other setups. It is likely due to the uneven numbers of positive and negative samples used for the training of neural networks (as per Figure \ref{fig:Brojevi}). These datasets have a significantly higher number of positive samples than negative, which is not the case with setups with threshold parameters equal to 0.8 m and 1 m. This disbalance emphasises the importance of negative samples for learning and is in line with \cite{Gandhi2017}, and neural networks may need to be fed with more training samples given the current ratio between negative and positive samples to achieve improved performance. The experiment also demonstrated that for neural networks trained with a threshold of  1 m robot executed a significant number of in-place rotations due to the course's narrowness (which was 2.16 m and augmented with additional obstacles). The robot is 0.35 m in diameter, so it needed additional in-place rotations to ``find'' an obstacle-free route.
+It was also observed that there were more crash events for datasets created with threshold parameter values of 0.4 m and 0.6 m than with other setups. It is likely due to the uneven numbers of positive and negative samples used for the training of neural networks (as per Figure \ref{fig:Brojevi}). These datasets have a significantly higher number of positive samples than negative, which is not the case with setups with threshold parameters equal to 0.8 m and 1 m. This disbalance emphasises the importance of negative samples for learning. It is in line with \cite{Gandhi2017}, and neural networks may need to be fed with more training samples given the current ratio between negative and positive samples to achieve improved performance. The experiment also demonstrated that for neural networks trained with a threshold of  1 m robot executed a significant number of in-place rotations due to the course's narrowness (which was 2.16 m and augmented with additional obstacles). The robot is 0.35 m in diameter, so it needed additional in-place rotations to ``find'' an obstacle-free route.
 
 Out of 60 trials with different neural networks (i.e., neural networks trained with different datasets), in 47 trials, the robot did not complete the course (i.e., get to the other side of the corridor/course), while in the other 13 trials the course was completed. This outcome is not surprising since the robot is not aware of the goal point. It freely roams through the course, going forward when the space in front of it is obstacle-free, and avoiding the obstacle otherwise, which often results in the robot turning away from the course end (which should not be considered as a flaw of the approach, but the limitation of the experimental setup).
 
@@ -26,7 +26,7 @@ Out of 60 trials with different neural networks (i.e., neural networks trained w
 \label{Tbl:Stats}
 \begin{tabular}{ccccccc}
 \toprule
-\textbf{Points} & \textbf{Threshold} & \textbf{Completed} & \textbf{Crashes\tablefootnote{Total number of crashes}} & \textbf{Thin obs.\tablefootnote{Number of crashes into thin obstacle near course end}} & \textbf{Loop} & \textbf{Local minimum}\\
+\textbf{Points\tablefootnote{The number of LiDAR points needed to classify a sample as negative}} & \textbf{Threshold} & \textbf{Completed} & \textbf{Crashes\tablefootnote{Total number of crashes}} & \textbf{Thin obs.\tablefootnote{The number of crashes into thin obstacle near course end}} & \textbf{Loop} & \textbf{Local minimum}\\
 \midrule
 \multirow{4}{*}{3} & 0.4 m & 0 & 5 & 1 & 0 & 0\\
 & 0.6 m & 1 & 2 & 1 & 2 & 0\\
@@ -51,7 +51,7 @@ The robot collided with that obstacle significantly more often using this setup 
 
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{slike/lidar_tocke.png}
+\includegraphics[width=0.5\textwidth]{slike/Fig04_02.png}
 \caption{Visualisations of LiDAR scan points when robot approaches thin obstacle from various angles}
 \label{Fig:Tocke}
 \end{figure}
@@ -60,7 +60,7 @@ The timings of experiment trials were recorded and reported for completed course
 
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{slike/vrimena}
+\includegraphics[width=0.5\textwidth]{slike/Fig04_03.png}
 \caption{Time analysis of completed course trials}
 \label{Fig:Vrimena}
 \end{figure}
@@ -73,13 +73,13 @@ Examples of the robot trajectories obtained during the experiment are shown in F
 
 \begin{figure}
 \centering
-\subfloat[The trajectory of the completed course \label{Fig:LabellingTraja}]{\includegraphics[width=0.495\textwidth]{slike/trajektorija_ok}}
+\subfloat[The trajectory of the completed course \label{Fig:LabellingTraja}]{\includegraphics[width=0.495\textwidth]{slike/Fig04_04a.png}}
 \hfill
-\subfloat[The trajectory of a course that resulted in a crash\label{Fig:LabellingTrajb}]{\includegraphics[width=0.495\textwidth]{slike/trajektorija_crash}}
+\subfloat[The trajectory of a course that resulted in a crash\label{Fig:LabellingTrajb}]{\includegraphics[width=0.495\textwidth]{slike/Fig04_04b.png}}
 \vfill
-\subfloat[The trajectory of a course that resulted in a loop \label{Fig:LabellingTrajc}]{\includegraphics[width=0.495\textwidth]{slike/trajektorija_loop}}
+\subfloat[The trajectory of a course that resulted in a loop \label{Fig:LabellingTrajc}]{\includegraphics[width=0.495\textwidth]{slike/Fig04_04c.png}}
 \hfill
-\subfloat[The trajectory of a course in which the robot got stuck at local minimum \label{Fig:LabellingTrajd}]{\includegraphics[width=0.495\textwidth]{slike/trajektorija_min}}
+\subfloat[The trajectory of a course in which the robot got stuck at local minimum \label{Fig:LabellingTrajd}]{\includegraphics[width=0.495\textwidth]{slike/Fig04_04d.png}}
 
 \caption{Examples of robot trajectories during the arameters identification experiment}
 \label{Fig:LabellingTraj}
@@ -94,9 +94,9 @@ In all 20 test runs of the first experiment in simulation, the run was terminate
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=0.495\textwidth]{slike/turkish/Fig06a.pdf}}
+    \subfloat{\includegraphics[width=0.495\textwidth]{slike/Fig04_05a.png}}
     \hfill
-    \subfloat{\includegraphics[width=0.495\textwidth]{slike/turkish/Fig06b.pdf}}
+    \subfloat{\includegraphics[width=0.495\textwidth]{slike/Fig04_05b.png}}
     \caption{Example trajectories obtained while testing the proposed obstacle avoidance method in simulation.}
     \label{fig:Fig06}
 \end{figure}
@@ -114,14 +114,14 @@ There were five measurement repetitions in the U-shaped obstacle experiment (fiv
 
 \begin{figure}
     \centering
-    \subfloat[Raw LiDAR scan\label{fig:UshapeLidar}]{\includegraphics[width=0.2\textwidth]{slike/turkish/Fig09b.pdf}}
+    \subfloat[Raw LiDAR scan\label{fig:UshapeLidar}]{\includegraphics[width=0.2\textwidth]{slike/Fig04_06a.png}}
     \hfill
-    \subfloat[Experimental results\label{fig:UshapeRes}]{\includegraphics[width=0.66\textwidth]{slike/turkish/Fig09c.pdf}}
+    \subfloat[Experimental results\label{fig:UshapeRes}]{\includegraphics[width=0.66\textwidth]{slike/Fig04_06b.png}}
     \caption{Performance of the obstacle avoidance in the presence of a U-shaped obstacle}
     \label{fig:Fig09}
 \end{figure}
 
-It should be noted that for this scenario, the robot crashed at least once for all cases (25 \% data 3 out of 5 times, 50 \% data 3 out of 5 times, and 75 \% 1 out of 5 times). The exception was for the case with 100 \% data. In contrast, any reduction in training data resulted in reduced reliability (especially in 25 \% and 50 \% test cases).
+It should be noted that for this scenario, the robot crashed at least once for all cases (with 25 \% data 3 out of 5 times, with 50 \% data 3 out of 5 times, and with 75 \% data 1 out of 5 times). The exception was for the case where the whole dataset was used. In contrast, any reduction in training data resulted in reduced reliability (especially in 25 \% and 50 \% test cases).
 
 These results led to the conclusion that the amount of collected crash data is just right, but perhaps even more crash data could prove beneficial for the reliable performance of obstacle avoidance in such challenging situations. It should also be noted that convex dead-ends pose a particular problem to the proposed obstacle avoidance approach. However, the approach is not intended to be used all by itself. Instead, it should be used in conjunction with navigation to the given goal, shown later on.
 
@@ -135,20 +135,20 @@ Finally, for the 100 \% case, the robot moved the fastest but crashed with the f
 
 \begin{figure}
     \centering
-    \subfloat[Raw LiDAR scan]{\includegraphics[height=0.2\textheight]{slike/turkish/Fig10b.pdf}}
+    \subfloat[Raw LiDAR scan]{\includegraphics[height=0.2\textheight]{slike/Fig04_07a.png}}
     \vfill
-    \subfloat[Results\label{fig:Fig10c}]{\includegraphics[width=0.75\textwidth]{slike/turkish/Fig10c.pdf}}
+    \subfloat[Results\label{fig:Fig10c}]{\includegraphics[width=0.75\textwidth]{slike/Fig04_07b.png}}
     \caption{Performance of the obstacle avoidance in a narrow corridor}
     \label{fig:Fig10}
 \end{figure}
 
 \subsubsection{Comparison with baseline}
 
-This experiment was repeated three times for each algorithm, six times in total. The obtained trajectories are shown in Figure \ref{fig:Fig11}. However, only four of those are shown in the figure for clarity reasons. It should be noted that DWA always avoided the obstacle to the left, while the presented obstacle avoidance (in selected examples) chose the right side twice and the left side once (demonstrating the stochastic nature of the approach). The experiment demonstrated that the proposed approach could be integrated into navigation-based algorithms and perform well. In Figure \ref{fig:Fig11}, please note parts of the trajectories for neural network-based obstacle avoidance outlined with different colours, in which the neural network-based obstacle avoidance was in complete control of the robot (otherwise, the navigation part was in control or the control was shared).
+This experiment was repeated three times for each algorithm (neural network-based obstacle avoidance and DWA), six times in total. The obtained trajectories are shown in Figure \ref{fig:Fig11}. However, only four of those are shown in the figure for clarity reasons. It should be noted that DWA always avoided the obstacle to the left, while the presented obstacle avoidance (in selected examples) chose the right side twice and the left side once (demonstrating the stochastic nature of the approach). The experiment demonstrated that the proposed approach could be integrated into navigation-based algorithms and perform well. In Figure \ref{fig:Fig11}, please note parts of the trajectories for neural network-based obstacle avoidance outlined with different colours, in which the neural network-based obstacle avoidance was in complete control of the robot (otherwise, the navigation part was in control or the control was shared).
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.75\textwidth]{slike/turkish/Fig11.pdf}
+    \includegraphics[width=0.75\textwidth]{slike/Fig04_08.png}
     \caption{Comparison of obstacle avoidance methods in a navigation task}
     \label{fig:Fig11}
 \end{figure}
@@ -159,11 +159,11 @@ In the complex, self-contained obstacle course (a snapshot of which is shown in 
 
 \begin{figure}
     \centering
-    \subfloat[An overview of the course with moving obstacles]{\includegraphics[width=0.75\textwidth]{slike/turkish/Fig12b.pdf}}
+    \subfloat[An overview of the course with moving obstacles]{\includegraphics[width=0.75\textwidth]{slike/Fig04_09a.png}}
     \vfill
-    \subfloat[A crash with an obstacle with a thin profile \label{fig:ObsCourseThin}]{\includegraphics[width=0.495\textwidth]{slike/obscourse_thin.png}}
+    \subfloat[A crash with an obstacle with a thin profile \label{fig:ObsCourseThin}]{\includegraphics[width=0.495\textwidth]{slike/Fig04_09b.png}}
     \hfill
-    \subfloat[A robot approaching the edge of the course]{\includegraphics[width=0.495\textwidth]{slike/obscourse_edge.png}}
+    \subfloat[A robot approaching the edge of the course]{\includegraphics[width=0.495\textwidth]{slike/Fig04_09c.png}}
     \caption{Snapshots of real-world testing environment for obstacle avodaince in a complex obstacle course}
     \label{fig:ObstacleCourseSnap}
 \end{figure}
@@ -175,9 +175,15 @@ When considering possible improvements of the proposed obstacle avoidance method
 \section{Mediated navigation in mobile robotics}
 \label{sec:ResMediation}
 
-The results reported throughout Section \ref{sec:ResMediation} are summarised in Table \ref{Tbl:ResultsSummary} for easier reading. They will be explained in more detail in the following subsections. Please note that the bottom row is about the total distance covered during reported testing, as well as the timing and number of instances tested. The totals indicate the extent to which the proposed approach was tested. However, please keep in mind that all the testing was conducted indoors.
+The results reported throughout Section \ref{sec:ResMediation} are summarised in Table \ref{Tbl:ResultsSummary} for easier reading. They will be explained in more detail in the following subsections. Please note that only summary statistics regarding distance and time were reported in the table, and that raw results about specific experiment instances is provided at appropriate places in the following subsections. At the bottom of the table, there are two rows that summarise all the results in this section: one gives about total distances and timings in all experiments together and reports the total number of experimental trials, and the other states the percentage of total that is conducted using approaches proposed in this dissertation. These totals indicate the extent to which the proposed approach was tested. However, please keep in mind that all the testing was conducted indoors.
 
-\begin{table}[H]
+\subsection{Simulation} \label{sec:MediationSimResults}
+
+Example trajectories (random $10$ out of $15$ for both test cases) obtained in the simulation are presented in Figure \ref{fig:SimulationTest}. Please note that goal points are marked with different symbols in each case.
+
+It is worth noting that the mobile base never crashed for the neural network-based navigation controller, while for the P-type-based navigation controller, in four cases (26 \%) crash occurred. Due to the observed robot behaviour during the experiment, the conclusion was drawn that this was mainly due to the ``aggressive'' nature of the P-type controller (especially in rotation, when trying to reach the goal as directly as possible, ideally in a straight line), which tries to get to the goal point in a straight line. In contrast, neural network-based navigation tries to do the same but with a slightly arched trajectory, as can be seen in \cref{fig:SimulationTest}. Such behaviour makes it hard for neural network-based obstacle avoidance to recover (or even results in LiDAR failure due to an obstacle being too close). However, additional parameters, like goal points too close to the obstacles or in physically unreachable cases, might have, in some instances, contributed to the crash event. 
+
+\begin{table}
 \caption{Summary of all experimental results for the mediated navigation}
 \label{Tbl:ResultsSummary}
 \centering
@@ -206,25 +212,22 @@ The results reported throughout Section \ref{sec:ResMediation} are summarised in
  &  & NN & LF & 49.31$\pm$20.41 & 288$\pm$93.34 &  \\
  \midrule
  \multicolumn{4}{r}{\textbf{TOTAL}} &  1,466.78 & 8,401.29 & 83 \\
- \multicolumn{4}{r}{\textbf{EXCLUDING BASELINE (\%)}} &  78.27\% & 80.28\% & 79.52\% \\ 
+ \multicolumn{4}{r}{\textbf{USING THE PROPOSED APPROACHES (\%)}} &  78.27\% & 80.28\% & 79.52\% \\ 
  \bottomrule
-
 \end{tabular}%
 }
 \end{table}
 
-\subsection{Simulation} \label{sec:MediationSimResults}
 
-Example trajectories (random $10$ out of $15$ for both test cases) obtained in the simulation are presented in Figure \ref{fig:SimulationTest}. Please note that goal points are marked with different symbols in each case.
 
 \begin{figure}
     \centering
     \subfloat[P-type navigation controller.\label{Fig:Gazebo_P}]{
-        \includegraphics[width=0.475\textwidth]{slike/res_sim_a.png}
+        \includegraphics[width=0.475\textwidth]{slike/Fig04_10a.png}
     }
     \hfill
     \subfloat[Neural network-based navigation controller.\label{Fig:Gazebo_NN}]{
-        \includegraphics[width=0.475\textwidth]{slike/res_sim_b.png}
+        \includegraphics[width=0.475\textwidth]{slike/Fig04_10b.png}
     }
     \caption{Trajectories acquired during testing mediation in a simulation environment}
     \label{fig:SimulationTest}
@@ -245,26 +248,26 @@ The figure shows that for all three setups, the robot reached the goal area (the
 
 \begin{figure}
 \centering
-\subfloat[Trajectories (Z)\label{Fig:Trajektorije_preprekeA}]{\includegraphics[width=0.45\textwidth]{slike/res_traj_a.jpg}}
+\subfloat[Trajectories (Z)\label{Fig:Trajektorije_preprekeA}]{\includegraphics[width=0.45\textwidth]{slike/Fig04_11a.jpg}}
 \hfill
-\subfloat[$p_{col}$ and $\zeta$ values (Z)\label{Fig:Trajektorije_preprekeB}]{\includegraphics[width=0.45\textwidth]{slike/res_traj_b.png}}
+\subfloat[$p_{col}$ and $\zeta$ values (Z)\label{Fig:Trajektorije_preprekeB}]{\includegraphics[width=0.45\textwidth]{slike/Fig04_11b.png}}
 \vfill
-\subfloat[Trajectories (U)\label{Fig:Trajektorije_preprekeC}]{\includegraphics[width=0.45\textwidth]{slike/res_traj_c.jpg}}
+\subfloat[Trajectories (U)\label{Fig:Trajektorije_preprekeC}]{\includegraphics[width=0.45\textwidth]{slike/Fig04_11c.jpg}}
 \hfill
-\subfloat[$p_{col}$ and $\zeta$ values (U)\label{Fig:Trajektorije_preprekeD}]{\includegraphics[width=0.45\textwidth]{slike/res_traj_d.png}}
+\subfloat[$p_{col}$ and $\zeta$ values (U)\label{Fig:Trajektorije_preprekeD}]{\includegraphics[width=0.45\textwidth]{slike/Fig04_11d.png}}
 \caption{Examples of simple navigation task results with U- and Z-shaped obstacles.}
 \label{Fig:Trajektorije_prepreke}
 \end{figure}
 
 It is interesting to note that DWA also had some issues with U-shaped obstacles. These issues resulted in longer navigation runs than both setups for the proposed approach (94.93 s vs 62.94 s vs 67.36 s for DWA, the neural network and P-controller setup, respectively). Completion times for the Z-shaped obstacle were similar for all three setups (DWA: 41.63 s, neural network: 39.06 s, and P-controller: 41.27 s, for this particular example). However, on average, ROS/DWA was the fastest method in all cases, but not always the one with the shortest distance travelled (please see \cref{Tbl:ResultsSummary}). In all experimental runs except one (for the U-shaped obstacle), the robot went left to avoid the obstacle and complete the course. In the mentioned single case, the robot went right to avoid the obstacle and into the narrow space (1.4 m) between the wall and the obstacle. Such decisions resulted in the longer run (102.32 s) with more direction changes because, during the entire run, the control was dominated by obstacle avoidance. These tests demonstrated that the proposed approach can be applied even in more demanding cases like the U-shape obstacle, but with certain limitations. Namely, the mediation approach lengthens the run due to the domination of the obstacle avoidance part. However, shortcoming could be avoided by using a more appropriate navigation controller with some waypoints on the way to the given goal, rather than just a goal point, as was the case in this experiment.
 
-The change in the collision probability and $\zeta$ parameter values for both test cases (where the mediation was used) can be seen in Figures \ref{Fig:Trajektorije_preprekeB} and \ref{Fig:Trajektorije_preprekeD}. Please note that the value of 1 for the parameter $\zeta$ means that the obstacle avoidance controller is in complete control of the robot, and 0 is in pure navigation mode. All values in between mean that the mediation approach considers both the navigation and obstacle avoidance controller (in an appropriate proportion).
+The change in the collision probability and $\zeta$ parameter values for both test cases (where the mediation was used) can be seen in Figures \ref{Fig:Trajektorije_preprekeB} and \ref{Fig:Trajektorije_preprekeD}. Please note that the value of $\zeta=1$ means that the obstacle avoidance controller is in complete control of the robot, and $\zeta=0$ is in pure navigation mode. All values in between mean that the mediation approach considers both the navigation and obstacle avoidance controller (in an appropriate proportion).
 
 Next, a more demanding navigation task was used to test the proposed mediation approach in the larger environment and a realistic scenario. The experiment was conducted on the fourth floor at the University of Split, Faculty of Electrical Engineering, Mechanical Engineering and Naval Architecture, while Turtlebot 2 robot was used in the experiment. Examples of the obtained trajectories (for two different goal points) are depicted in Figure \ref{Fig:Trajektorije_hodnik}. Please note that although the obtained trajectories are plotted on the map, the robot itself did not have access to the map in the proposed approach (but does have it without obstacles for ROS/DWA case). In essence, robot path planning is a straight line, going from the start to the proposed approach's goal position. From the figure, it can be observed that the robot successfully reached the goals in all cases, with ROS/DWA again having a more direct route which is reflected in completion times in Table \ref{Tbl:ResultsSummary}. The main reason for this is that the upper corridor in which the robot had to enter was narrow (1.8 m) and resulted in the activation of the obstacle avoidance part, which turned the robot away from it if the approach angle was not appropriate. It is also evident that trajectories obtained using neural network-based navigation controller resulted (again) in smoother trajectories than those with P-type controller, which was a consequence of the ``aggressiveness'' of the P-type controller in trying to reach the goal. In terms of speed, i.e., completion time, the following results were obtained: 295.56 s and 195.44 s for DWA case, 337.51 s and 296.05 s for neural network case, and finally 479.76 s and 453.34 s for the P case. It should be noted that for specific start-goal point configurations, the robot got stuck at certain areas in space, constantly switching between obstacle avoidance and navigation. A similar effect was reported in \cite{Pfeiffer2017} and could potentially be reduced/eliminated by inserting several additional waypoints.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.85\columnwidth]{slike/res_hodnik1.jpg}
+\includegraphics[width=0.85\columnwidth]{slike/Fig04_12.jpg}
 \caption{Trajectories obtained in the demanding navigation task with Turtlebot 2 robot using different obstacle avoidance and navigation setups}
 \label{Fig:Trajektorije_hodnik}
 \end{figure}
@@ -274,10 +277,10 @@ In the next stage of testing, a custom-built robot with a different footprint wa
 \begin{figure}
 \centering
 \subfloat[Experimental setup \label{Fig:B401Mjerenje_NN}]{
-   \includegraphics[width=0.8\textwidth]{slike/res_b401_ex.png}}
+   \includegraphics[width=0.8\textwidth]{slike/Fig04_13a.png}}
 \hfill
 \subfloat[Example trajectories with artificial obstacles marked as filled blocks (in scale)]{
-   \includegraphics[width=\textwidth]{slike/res_b401_graph.png}
+   \includegraphics[width=0.98\textwidth]{slike/Fig04_13b.png}
    }
 \caption{Experimental measurement with the custom-built robot on an obstacle course}
 \label{Fig:paletarTesting}
@@ -297,14 +300,14 @@ Please note that improved/faster performance might be achieved if numerous ROS/D
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.85\columnwidth]{slike/res_hodnik2.jpg}
+    \includegraphics[width=0.85\columnwidth]{slike/Fig04_14.jpg}
     \caption{Trajectories obtained in the demanding navigation task with custom-built robot using different obstacle avoidance and navigation setups}
     \label{Fig:Trajektorije_hodnik2}
 \end{figure}
 
 \subsection{Teleoperation scenario} \label{sec:MediationTeleopResults}
 
-During the application-based testing, users in all test cases completed the given task. However, in 100 \% of cases with \emph{surprise obstacles} case, the mediation algorithm activated the neural network-based obstacle avoidance, while in 47 \% of cases with \emph{no surprise obstacles} instances, the fuzzy mediation activated obstacle avoidance. This behaviour highlights the need for inclusion of such a safety mechanism (possibly fine-tuned by an operator) in teleoperation, since, with even one visible large obstacle (as was the case here), operators did not manage to complete the task without the danger of damaging either the robot or the obstacle. It should, however, be noted that in 23 \% of all cases, when the mediator transferred the control to obstacle avoidance, the robot did not hit the obstacle but did slightly brush against it. This observation indicates that additional work is needed in adaptive mediator parameter adjustment and improving the obstacle avoidance algorithm (possibly training it to react at greater distances than 1 m, as was the case, or implementing in-place rotation). Another worthwhile remark recorded during test subjects' post-measurement interviews is that test subjects were not always sure (especially when control was not fully transferred to obstacle avoidance) if the robot was in obstacle avoidance or simply an issue was in communication/lag. Thus they suggested including a graphical user interface (or even tactile feedback) indicating when and how strongly did fuzzy mediator transfer control to obstacle avoidance (or any other controller for that matter).
+During the application-based testing, subjects (students and faculty in author's institution) in all test cases completed the given task. However, in 100 \% of cases with \emph{surprise obstacles} case, the mediation algorithm activated the neural network-based obstacle avoidance, while in 47 \% of cases with \emph{no surprise obstacles} instances, the fuzzy mediation activated obstacle avoidance. This behaviour highlights the need for inclusion of such a safety mechanism (possibly fine-tuned by an operator) in teleoperation, since, with even one visible large obstacle (as was the case here), operators did not manage to complete the task without the danger of damaging either the robot or the obstacle. It should, however, be noted that in 23 \% of all cases, when the mediator transferred the control to obstacle avoidance, the robot did not hit the obstacle but did slightly brush against it. This observation indicates that additional work is needed in adaptive mediator parameter adjustment and improving the obstacle avoidance algorithm (possibly training it to react at greater distances than 1 m, as was the case, or implementing in-place rotation). Another worthwhile remark recorded during test subjects' post-measurement interviews is that test subjects were not always sure (especially when control was not fully transferred to obstacle avoidance) if the robot was in obstacle avoidance or simply an issue was in communication/lag. Thus they suggested including a graphical user interface (or even tactile feedback) indicating when and how strongly did fuzzy mediator transfer control to obstacle avoidance (or any other controller for that matter).
 
 Looking at the responses for the first two questions of the mini-survey, which each test subject completed after finishing the experiment, the following results were obtained. For the question \emph{Did you feel in complete control during the teleoperation?} the average response had a value of 66.4 with a standard deviation of 11.0 (where 0 represents ``I was not in a full control.'' response, and 100 ``I was in a full control.'' response, while 50 represented neutral response). For the question \emph{Do you feel that automatic obstacle avoidance through mediation helped you during teleoperation?} the mean response had a value of 66.0 with a standard deviation of 15.1 (where 0 represented ``I strongly feel it did not.'' response, and 100 ``It strongly feel it did.'' response, while 50 represented neutral response). Finally, for the third question \emph{Was completing the required task easier with or without the mediation?} 8 out of 9 test subjects ($89\%$) felt that the task completion was easier with mediation.
 
@@ -325,15 +328,15 @@ Networks presented in Table \ref{tab:NetworksMover} were trained, with the resul
         \toprule
         \textbf{No.} & \textbf{Architecture} & \textbf{Validation Loss} & \textbf{Test Loss} & \textbf{RMSE\textsubscript{x}} & \textbf{RMSE\textsubscript{y}} & \textbf{RMSE\textsubscript{z}} \\
         \midrule
-        1 & MLP & 1.92130 & 3.5392 & 2.5623 & 3.0335 & 2.7934\\
-        2 & MLP & 2.10563 & 3.2132 & 2.8725 & 3.0540 & 2.7845\\
-        3 & MLP & 1.95203 & 3.4192 & 2.6007 & 2.8154 & 2.5659\\
-        4 & Conv & 2.02529 & 3.4508 & 2.8554 & 2.9534 & 2.6193 \\
-        5 & Conv & 1.92932 & 3.5604 & 2.5468 & 2.7671 & 2.4515\\
-        6 & Conv & \textbf{1.88883} & 3.3298 & \textbf{2.5386} & \textbf{2.7577} & \textbf{2.3894} \\
-        7 & LSTM & 2.02308 & 3.3601 & 2.5757 & 2.9328 & 2.6488 \\
-        8 & LSTM & 1.96090 & \textbf{3.0722} & 2.5637 & 2.8173 & 2.5134\\
-        9 & LSTM & 1.97469 & 3.5950 & 2.6007 & 2.8573 & 2.6239 \\
+        1 & MLP & 1.9213 & 3.5392 & 2.5623 & 3.0335 & 2.7934\\
+        2 & MLP & 2.1056 & 3.2132 & 2.8725 & 3.0540 & 2.7845\\
+        3 & MLP & 1.9520 & 3.4192 & 2.6007 & 2.8154 & 2.5659\\
+        4 & Conv & 2.0253 & 3.4508 & 2.8554 & 2.9534 & 2.6193 \\
+        5 & Conv & 1.9293 & 3.5604 & 2.5468 & 2.7671 & 2.4515\\
+        6 & Conv & \textbf{1.8888} & 3.3298 & \textbf{2.5386} & \textbf{2.7577} & \textbf{2.3894} \\
+        7 & LSTM & 2.0231 & 3.3601 & 2.5757 & 2.9328 & 2.6488 \\
+        8 & LSTM & 1.9609 & \textbf{3.0722} & 2.5637 & 2.8173 & 2.5134\\
+        9 & LSTM & 1.9747 & 3.5950 & 2.6007 & 2.8573 & 2.6239 \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -342,17 +345,17 @@ From the results, it is not immediately observable which architecture is optimal
 
 \begin{figure}
     \centering
-    \subfloat[Arch. \#3\label{fig:Graph01}]{\includegraphics[width=0.495\columnwidth]{slike/mlp03_000.png}}
+    \subfloat[Arch. \#3\label{fig:Graph01}]{\includegraphics[width=0.495\columnwidth]{slike/Fig04_15a.png}}
     \hfil
-    \subfloat[Arch. \#2\label{fig:Graph02}]{\includegraphics[width=0.495\columnwidth]{slike/mlp02_143.png}}
+    \subfloat[Arch. \#2\label{fig:Graph02}]{\includegraphics[width=0.495\columnwidth]{slike/Fig04_15b.png}}
     \vfil
-    \subfloat[Arch. \#4\label{fig:Graph03}]{\includegraphics[width=0.495\columnwidth]{slike/conv01_000.png}}
+    \subfloat[Arch. \#4\label{fig:Graph03}]{\includegraphics[width=0.495\columnwidth]{slike/Fig04_15c.png}}
     \hfil
-    \subfloat[Arch. \#6\label{fig:Graph04}]{\includegraphics[width=0.495\columnwidth]{slike/conv03_143.png}}
+    \subfloat[Arch. \#6\label{fig:Graph04}]{\includegraphics[width=0.495\columnwidth]{slike/Fig04_15d.png}}
     \vfil
-    \subfloat[Arch. \#9\label{fig:Graph05}]{\includegraphics[width=0.495\columnwidth]{slike/lstm03_000.png}}
+    \subfloat[Arch. \#9\label{fig:Graph05}]{\includegraphics[width=0.495\columnwidth]{slike/Fig04_15e.png}}
     \hfil
-    \subfloat[Arch. \#8\label{fig:Graph06}]{\includegraphics[width=0.495\columnwidth]{slike/lstm02_143.png}}
+    \subfloat[Arch. \#8\label{fig:Graph06}]{\includegraphics[width=0.495\columnwidth]{slike/Fig04_15f.png}}
     \caption{Example end-effector force predictions examples on test set for trained networks on Mover6 robot}
     \label{fig:Graphs}
 \end{figure}
@@ -398,27 +401,27 @@ It is also noticeable from the obtained results that networks operating on seque
 \begin{figure}
     \centering
     \subfloat[MLP (arch. \#2)\label{fig:SimGraph01}]{
-        \includegraphics[width=0.48\textwidth]{slike/mdpi/sim_mlp03_006.pdf}
+        \includegraphics[width=0.48\textwidth]{slike/Fig04_16a.png}
     }
     \hfill
     \subfloat[MLP (arch. \#3)\label{fig:SimGraph02}]{
-        \includegraphics[width=0.48\textwidth]{slike/mdpi/sim_mlp04_021.pdf}
+        \includegraphics[width=0.48\textwidth]{slike/Fig04_16b.png}
     }
     \vfill
     \subfloat[Convolutional (arch. \#4)\label{fig:SimGraph03}]{
-        \includegraphics[width=0.48\textwidth]{slike/mdpi/sim_conv01_006.pdf}
+        \includegraphics[width=0.48\textwidth]{slike/Fig04_16c.png}
     }
     \hfill
     \subfloat[Convolutional (arch. \#6)\label{fig:SimGraph04}]{
-        \includegraphics[width=0.48\textwidth]{slike/mdpi/sim_conv03_021.pdf}
+        \includegraphics[width=0.48\textwidth]{slike/Fig04_16d.png}
     }
     \vfill
     \subfloat[LSTM (arch. \#7)\label{fig:SimGraph05}]{
-        \includegraphics[width=0.48\textwidth]{slike/mdpi/sim_lstm03_006.pdf}
+        \includegraphics[width=0.48\textwidth]{slike/Fig04_16e.png}
     }
     \hfill
     \subfloat[LSTM (arch. \#9)\label{fig:SimGraph06}]{
-        \includegraphics[width=0.48\textwidth]{slike/mdpi/sim_lstm02_021.pdf}
+        \includegraphics[width=0.48\textwidth]{slike/Fig04_16f.png}
     }
     \caption{End-effector force predictions examples on test set for trained networks on Franka robot in simulation}
     \label{fig:SimGraphs}
@@ -428,20 +431,20 @@ The performed hyperparameter optimisation yielded networks that produced somewha
 
 \begin{figure}
     \centering
-    \subfloat[Optimised LSTM (arch. \#10)]{
-        \includegraphics[width=0.48\textwidth]{slike/sim_optimee_006.png}
+    \subfloat[Optimised LSTM (arch. \#10); Example 1]{
+        \includegraphics[width=0.48\textwidth]{slike/Fig04_17a.png}
     }
     \hfill
-    \subfloat[Optimised LSTM (arch. \#10)]{
-        \includegraphics[width=0.48\textwidth]{slike/sim_optimee_021.png}
+    \subfloat[Optimised LSTM (arch. \#10); Example 2]{
+        \includegraphics[width=0.48\textwidth]{slike/Fig04_17b.png}
     }
     \vfill
-    \subfloat[Optimised LSTM (arch. \#11)]{
-        \includegraphics[width=0.48\textwidth]{slike/sim_optimee_jt_006.png}
+    \subfloat[Optimised LSTM (arch. \#11); Example 1]{
+        \includegraphics[width=0.48\textwidth]{slike/Fig04_17c.png}
     }
     \hfill
-    \subfloat[Optimised LSTM (arch. \#11)]{
-        \includegraphics[width=0.48\textwidth]{slike/sim_optimee_jt_021.png}
+    \subfloat[Optimised LSTM (arch. \#11); Example 2]{
+        \includegraphics[width=0.48\textwidth]{slike/Fig04_17d.png}
     }
     \caption[Examples of end-effector force predictions using the simulation data on test set for optimised LSTM architectures]{Examples of end-effector force predictions using the simulation data on test set for optimised LSTM architectures (examples are corresponding to ones in \cref{fig:SimGraphs})}
     \label{fig:SimOptimEE}
@@ -474,26 +477,26 @@ Similarly to the networks trained on simulation data, the networks were trained 
 
 \begin{figure}
     \centering
-    \subfloat[Simulation data]{\includegraphics[width=0.495\textwidth]{slike/hist_sim.png}}
+    \subfloat[Simulation data]{\includegraphics[width=0.495\textwidth]{slike/Fig04_18a.png}}
     \hfill
-    \subfloat[Real-world data]{\includegraphics[width=0.495\textwidth]{slike/hist_real.png}}
+    \subfloat[Real-world data]{\includegraphics[width=0.495\textwidth]{slike/Fig04_18b.png}}
     \caption{Training vs. validation loss comparison between simulated and real-world Franka robot}
     \label{fig:HistSimVsReal}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat[MLP (arch. \#1)]{\includegraphics[width=0.48\columnwidth]{slike/franka_mlp04_003.png}}
+    \subfloat[MLP (arch. \#1)]{\includegraphics[width=0.48\columnwidth]{slike/Fig04_19a.png}}
     \hfil
-    \subfloat[MLP (arch. \#2)]{\includegraphics[width=0.48\columnwidth]{slike/franka_mlp05_037.png}}
+    \subfloat[MLP (arch. \#2)]{\includegraphics[width=0.48\columnwidth]{slike/Fig04_19b.png}}
     \vfil
-    \subfloat[Convolutional (arch. \#6)]{\includegraphics[width=0.48\columnwidth]{slike/franka_conv03_003.png}}
+    \subfloat[Convolutional (arch. \#6)]{\includegraphics[width=0.48\columnwidth]{slike/Fig04_19c.png}}
     \hfil
-    \subfloat[Convolutional (arch. \#4)]{\includegraphics[width=0.48\columnwidth]{slike/franka_conv01_037.png}}
+    \subfloat[Convolutional (arch. \#4)]{\includegraphics[width=0.48\columnwidth]{slike/Fig04_19d.png}}
     \vfil
-    \subfloat[LSTM (arch. \#8)]{\includegraphics[width=0.48\columnwidth]{slike/franka_lstm02_003.png}}
+    \subfloat[LSTM (arch. \#8)]{\includegraphics[width=0.48\columnwidth]{slike/Fig04_19e.png}}
     \hfil
-    \subfloat[LTSM (arch. \#9)]{\includegraphics[width=0.48\columnwidth]{slike/franka_lstm03_037.png}}
+    \subfloat[LTSM (arch. \#9)]{\includegraphics[width=0.48\columnwidth]{slike/Fig04_19f.png}}
     \caption{End-effector force prediction examples using real-world data for Franka robot}
     \label{fig:RealGraphs}
 \end{figure}
@@ -542,10 +545,9 @@ When this architecture was trained on the dataset with external forces acting, t
 
 \begin{figure}
     \centering
-    %\subfloat{\includegraphics[width=0.45\textwidth]{slike/mdpi/teret_delan_005.png}}
-    \subfloat[Example from dataset \emph{without} external forces\label{fig:DeLaNResEmpty}]{\includegraphics[width=0.48\textwidth]{slike/mdpi/prazni_delan_002.pdf}}
+    \subfloat[Example from dataset \emph{without} external forces\label{fig:DeLaNResEmpty}]{\includegraphics[width=0.48\textwidth]{slike/Fig04_20a.png}}
     \hfill
-    \subfloat[Example from dataset \emph{with} external forces\label{fig:DeLaNResTeret}]{\includegraphics[width=0.48\textwidth]{slike/mdpi/teret_delan_007.pdf}}
+    \subfloat[Example from dataset \emph{with} external forces\label{fig:DeLaNResTeret}]{\includegraphics[width=0.48\textwidth]{slike/Fig04_20b.png}}
     \caption{Example torque estimates using DeLaN architecture with different datasets}
     \label{fig:DeLaNRes}
 \end{figure}
@@ -554,9 +556,9 @@ Classical neural network architectures, especially LSTMs (which operate on seque
 
 \begin{figure}
     \centering
-    \subfloat[Convolutional network]{\includegraphics[width=0.48\textwidth]{slike/mdpi/teret_conv_005.pdf}}
+    \subfloat[Convolutional network]{\includegraphics[width=0.48\textwidth]{slike/Fig04_21a.png}}
     \hfill
-    \subfloat[LSTM network]{\includegraphics[width=0.48\textwidth]{slike/mdpi/teret_lstm_005.pdf}}
+    \subfloat[LSTM network]{\includegraphics[width=0.48\textwidth]{slike/Fig04_21b.png}}
     \caption{Example torque estimates using classical architectures with simulation dataset}
     \label{fig:ConvLSTMResTeret}
 \end{figure}
@@ -569,13 +571,13 @@ It is essential to emphasise that the analytical model took almost three hours t
 
 \begin{figure}
     \centering
-    \subfloat[DeLaN]{\includegraphics[width=0.47\textwidth]{slike/mdpi/franka_delan_005.pdf}}
+    \subfloat[DeLaN]{\includegraphics[width=0.47\textwidth]{slike/Fig04_22a.png}}
     \hfill
-    \subfloat[MLP]{\includegraphics[width=0.47\textwidth]{slike/mdpi/franka_mlp_005.pdf}}
+    \subfloat[MLP]{\includegraphics[width=0.47\textwidth]{slike/Fig04_22b.png}}
     \vfill
-    \subfloat[Convolutional network]{\includegraphics[width=0.47\textwidth]{slike/mdpi/franka_conv_005.pdf}}
+    \subfloat[Convolutional network]{\includegraphics[width=0.47\textwidth]{slike/Fig04_22c.png}}
     \hfill
-    \subfloat[LSTM network]{\includegraphics[width=0.47\textwidth]{slike/mdpi/franka_lstm_005.pdf}}
+    \subfloat[LSTM network]{\includegraphics[width=0.47\textwidth]{slike/Fig04_22d.png}}
     \caption{Torque estimates on the real-world dataset compared with the analytical model}
     \label{fig:NetworksFrankaTorqueReal}
 \end{figure}
@@ -586,9 +588,9 @@ In the case of joint torques estimation, hyperparameter optimisation was also pe
 
 \begin{figure}
     \centering
-    \subfloat[In simulation]{\includegraphics[width=0.48\textwidth]{slike/optim_torque02_006.png}}
+    \subfloat[In simulation]{\includegraphics[width=0.48\textwidth]{slike/Fig04_23a.png}}
     \hfill
-    \subfloat[In real world]{\includegraphics[width=0.48\textwidth]{slike/optim_torque_franka02_005.png}}
+    \subfloat[In real world]{\includegraphics[width=0.48\textwidth]{slike/Fig04_23b.png}}
     \caption{Example joint torque estimates for optimised LSTM network}
     \label{fig:JointTorqueOptim}
 \end{figure}
@@ -620,11 +622,11 @@ One thing noted in this experiment is that, surprisingly, this time, multilayer 
 
 \begin{figure}
     \centering
-    \subfloat[MLP network]{\includegraphics[width=0.45\textwidth]{slike/sg/sg_mlp_002.png}}
+    \subfloat[MLP network]{\includegraphics[width=0.45\textwidth]{slike/Fig04_24a.png}}
     \hfill
-    \subfloat[Convolutional network]{\includegraphics[width=0.45\textwidth]{slike/sg/sg_conv_002.png}}
+    \subfloat[Convolutional network]{\includegraphics[width=0.45\textwidth]{slike/Fig04_24b.png}}
     \vfill
-    \subfloat[LSTM network]{\includegraphics[width=0.45\textwidth]{slike/sg/sg_lstm_002.png}}
+    \subfloat[LSTM network]{\includegraphics[width=0.45\textwidth]{slike/Fig04_24c.png}}
     \caption{Example torque estimates on the real-world dataset using an array of single-axis force sensors}
     \label{fig:NetworksFrankaSG}
 \end{figure}

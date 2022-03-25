@@ -21,18 +21,18 @@ Differences between the simulated camera and LiDAR compared to the real-world ca
 
 \begin{figure}
     \centering
-    \subfloat[Camera image from simulation environment]{\includegraphics[width=0.45\textwidth]{slike/turkish/Fig01a.png}}
+    \subfloat[Camera image from simulation environment]{\includegraphics[width=0.45\textwidth]{slike/Fig03_01a.png}}
     \hfill
-    \subfloat[Camera image from real robot]{\includegraphics[width=0.45\textwidth]{slike/turkish/Fig01c.png}}
+    \subfloat[Camera image from real robot]{\includegraphics[width=0.45\textwidth]{slike/Fig03_01b.png}}
     \vfill
-    \subfloat[LiDAR data from simulation environment]{\includegraphics[width=0.45\textwidth]{slike/turkish/Fig01b.png}}
+    \subfloat[LiDAR data from simulation environment]{\includegraphics[width=0.45\textwidth]{slike/Fig03_01c.png}}
     \hfil
-    \subfloat[LiDAR data from real robot]{\includegraphics[width=0.45\textwidth]{slike/turkish/Fig01d.png}}
+    \subfloat[LiDAR data from real robot]{\includegraphics[width=0.45\textwidth]{slike/Fig03_01d.png}}
     \caption{Differences between camera images and laser scans in simulation and on the real robot of the approximately same scene.}
     \label{fig:Fig01}
 \end{figure}
 
-Please note that, although simulation-based neural network training approaches do exist in the literature (as is already presented in Chapter \ref{chap:Literature}), they usually employ cameras (which provide RGB images), use complex convolutional neural networks for obstacle avoidance, do not collect both positive and negative examples, and do not perform the neural network training process automatically. The focus of this part of the research was thus to develop the approach that would enable collecting the appropriate amount of data needed for training neural networks for obstacle avoidance in a self-supervised manner in simulation. Furthermore, it should also be answered that simulation-driven LiDAR data can be effectively used for training neural networks. Finally, it should also be demonstrated that seamless transfer to real-world applications is possible and that such neural networks perform well in the real world compared to some common obstacle avoidance algorithms.
+Please note that, although simulation-based neural network training approaches do exist in the literature (as is already presented in Chapter \ref{chap:Literature}), they usually employ cameras (which provide RGB images), use complex convolutional neural networks for obstacle avoidance, do not collect both positive and negative examples, and do not perform the neural network training process automatically. The focus of this part of the research was thus to develop the approach that would enable collecting the appropriate amount of data needed for training neural networks for obstacle avoidance in a self-supervised manner in simulation. Furthermore, it should also be confirmed that simulation-driven LiDAR data can be effectively used for training neural networks. Finally, it should also be demonstrated that seamless transfer to real-world applications is possible and that such neural networks perform well in the real world compared to some common obstacle avoidance algorithms.
 
 \subsection{Data collection and labelling}
 
@@ -40,14 +40,14 @@ Training data for obstacle avoidance was generated and collected in Gazebo simul
 
 \begin{figure}
     \centering
-    \subfloat[Gazebo world and various obstacle shapes. Please note that obstacles had footprints of 0.5 m $\times$ 0.5 m for cubes, 4 m $\times$ 0.8 m for cuboids and 0.5 m $\times$ 0.5 m for cylinders.]{\includegraphics[width=0.9\textwidth]{slike/turkish/Fig02a.pdf}}
+    \subfloat[Gazebo world and various obstacle shapes. Please note that obstacles had footprints of 0.5 m $\times$ 0.5 m for cubes, 4 m $\times$ 0.8 m for cuboids and 0.5 m $\times$ 0.5 m for cylinders.]{\includegraphics[width=0.9\textwidth]{slike/Fig03_02a.png}}
     \vfill
-    \subfloat[Examples of different randomly generated Gazebo Worlds]{\includegraphics[width=0.9\columnwidth]{slike/turkish/Fig02b.pdf}}
+    \subfloat[Examples of different randomly generated Gazebo Worlds]{\includegraphics[width=0.9\columnwidth]{slike/Fig03_02b.png}}
     \caption{Gazebo simulation environment}
     \label{fig:Fig02}
 \end{figure}
 
-The laser range finder scans were timestamped, and the timestamp of the moment when the robot hits the obstacle was also recorded. The preceding procedure is repeated many times (specified by the user) to obtain enough data for the neural networks to generalise appropriately. In the experiments, a total of 3,754 crash events were obtained (in 19 simulation worlds with different obstacle setups), which took about two workdays of real-time self-supervised execution (with no human intervention) on a computer with an Intel Core i3 6100 processor and 4 GB of RAM. The described data collection procedure resulted in 396,377 training samples (both positive and negative ones).
+The laser range finder scans were timestamped, and the timestamp of the moment when the robot hits the obstacle was also recorded. The preceding procedure is repeated many times (specified by the user) to obtain enough data for the neural networks to generalise appropriately. In the experiments, a total of 3,754 crash events were obtained (in 19 simulation worlds with different obstacle setups), which took about two workdays of real-time self-supervised execution (with no human intervention) on a computer with an Intel Core i3 6100 processor and 4 GB of RAM. The described data collection procedure resulted in 396,377 training samples both positive (no crash) and negative (a crash and a period shortly before the crash).
 
 Before the training of the neural networks, the obtained data were preprocessed. First, failed LiDAR measurements were replaced with maximal possible range values. Failed measurements occurred when the obstacle was closer than the declared minimum sensor range (0.15 m) or farther away than the maximum (6 m). Obtained scan data was then divided into three overlapping groups, so each of the three networks was trained on a different dataset. The network for the forward motion used scans of 45$^{\circ}$ to both left and right of forward direction (90$^{\circ}$ in total), while the network for left and right motion used scans of 90$^{\circ}$ to the left and the right of the forward direction. This is graphically depicted in Figure \ref{fig:Fig03} (from the robot's viewpoint).
 
@@ -55,7 +55,7 @@ The last two seconds of the robot motion before the collision were treated as ne
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.75\textwidth]{slike/turkish/Fig03.pdf}
+    \includegraphics[width=0.75\textwidth]{slike/Fig03_03.png}
     \caption{LiDAR scans divided into three overlapping groups (left, forward, right)}
     \label{fig:Fig03}
 \end{figure}
@@ -64,7 +64,7 @@ After initial labelling, all the labels are further examined, and those that are
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{slike/thr.png}
+    \includegraphics[width=0.9\textwidth]{slike/Fig03_04.png}
     \caption{The classification of LiDAR scan points in the presence of a complex obstacle}
     \label{fig:Threshold}
 \end{figure}
@@ -151,7 +151,7 @@ This experiment was conducted to assess the performance of neural networks train
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{slike/hodnik}
+\includegraphics[width=0.8\textwidth]{slike/Fig03_05.png}
 \caption{A corridor augmented with additional obstacles}
 \label{Fig:Hodnik}
 \end{figure}
@@ -168,7 +168,7 @@ The second simulation experiment was straightforward and was conducted in a smal
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\textwidth]{slike/turkish/Fig07.png}
+    \includegraphics[width=0.5\textwidth]{slike/Fig03_06.png}
     \caption{Simulation environment for testing robot behaviour in the presence of moving obstacle. Arrows indicate motion directions of the moving obstacle.}
     \label{fig:Fig07}
 \end{figure}
@@ -179,7 +179,7 @@ The experiments in the real world were conducted using a real robot, a heavily m
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{slike/turkish/Fig08.pdf}
+    \includegraphics[width=0.8\textwidth]{slike/Fig03_07.png}
     \caption{Turtlebot 2 mobile robot, used in real-world experiments}
     \label{fig:Fig08}
 \end{figure}
@@ -188,7 +188,7 @@ In the first real-world experiment, a U-shaped obstacle was used to test how wel
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{slike/turkish/Fig09a.pdf}
+    \includegraphics[width=\textwidth]{slike/Fig03_08.png}
     \caption{The experimental setup for the U-shaped test case}
     \label{fig:UshapeExp}
 \end{figure}
@@ -197,7 +197,7 @@ In contrast, in the second one, a narrow (only 2.16 m wide) corridor was augment
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.4\textwidth]{slike/turkish/Fig10a.pdf}
+    \includegraphics[width=0.4\textwidth]{slike/Fig03_09.png}
     \caption{The experimental setup for the narrow corridor test case}
     \label{fig:CorridorExp}
 \end{figure}
@@ -208,7 +208,7 @@ In the final real-world experiment, the robot was placed inside a complex, self-
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.775\textwidth]{slike/turkish/Fig12a.pdf}
+    \includegraphics[width=0.775\textwidth]{slike/Fig03_10.png}
     \caption{Floor plan of the real-world testing environment with static and dynamic obstacles}
     \label{fig:Fig12}
 \end{figure}
@@ -229,7 +229,7 @@ Overview of the proposed adaptive fuzzy control scheme can be seen in Figure \re
 
 \begin{figure}
 \centering
-\includegraphics[width=0.95\columnwidth]{slike/blok.png}
+\includegraphics[width=0.95\columnwidth]{slike/Fig03_11.png}
 \caption{The general control architecture of the proposed approach.} 
 \label{Fig:Blok}
 \end{figure}
@@ -281,12 +281,12 @@ where $x_i$, $y_i$ and $\theta_i$ define robot pose at time instance $i$, and $\
 
 \begin{figure}
     \centering
-    \includegraphics[width=\columnwidth]{slike/col_prob.png}
+    \includegraphics[width=\columnwidth]{slike/Fig03_12.png}
     \caption{An example of the collision probability calculation based on LiDAR data.}
     \label{Fig:Elipse2}
 \end{figure}
 
-After the projected trajectory has been calculated, an uncertainty ellipse is constructed around each point on the trajectory. The ellipses have increasing axes lengths with each ahead sample in order to account for motion uncertainty. While this always positive increase might be considered too cautious in some instances (e.g. driving parallel with an obstacle/wall), it is a prudent step since, in general, such situations where robots drive perfectly parallel to an obstacle are not too common. Also, with the appropriate selection of the initial ellipse dimensions as well as their increments (concerning the distance used in neural network-based obstacle avoidance training), this should not pose a serious limitation on robot performance (i.e. robot trajectory might be slightly longer, but the final objective would still be achieved). Ellipses' initial axis lengths and increments were determined experimentally but may change if the situation warrants it. For example, during the testing with Turtlebot 2 mobile robot, the following ellipse parameters values were used: $a_{init} = 0.3$ m, $b_{init} = 0.1$ m, $a_{incr} = 0.01$ m, and $b_{incr} = 0.005$ m (note that the $a$ axis is perpendicular to the current robot orientation). This in turn (after 2 sec ahead in time projection, as explained later on) gives an ellipse with maximum dimensions of $a_{max} = 0.5$ m and $b_{max} = 0.2$ m (keep in mind that the robot base dimensions are of 0.36 m diameter, as depicted in Figure \ref{fig:Fig08}). One possible improvement is to adjust these parameters adaptively (online). However, it should be noted that although two mobile robot platforms with very different footprints (both in size and in shape) have been used, only a limited number of parameters related to mediation were adjusted. Moreover, LiDAR readings were adjusted to better accommodate for LiDAR placement on the robot, as will be explained in more detail in Section \ref{sec:MediationExperiment}. 
+After the projected trajectory has been calculated, an uncertainty ellipse is constructed around each point on the trajectory. The ellipses have increasing axes lengths with each time instance in order to account for motion uncertainty. While this always positive increase might be considered too cautious in some instances (e.g. driving parallel with an obstacle/wall), it is a prudent step since, in general, such situations where robots drive perfectly parallel to an obstacle are not too common. Also, with the appropriate selection of the initial ellipse dimensions as well as their increments (concerning the distance used in neural network-based obstacle avoidance training), this should not pose a serious limitation on robot performance (i.e. robot trajectory might be slightly longer, but the final objective would still be achieved). Ellipses' initial axis lengths and increments were determined experimentally but may change if the situation warrants it. For example, during the testing with Turtlebot 2 mobile robot, the following ellipse parameters values were used: $a_{init} = 0.3$ m, $b_{init} = 0.1$ m, $a_{incr} = 0.01$ m, and $b_{incr} = 0.005$ m (note that the $a$ axis is perpendicular to the current robot orientation). This in turn (after 2 sec ahead in time projection, as explained later on) gives an ellipse with maximum dimensions of $a_{max} = 0.5$ m and $b_{max} = 0.2$ m (keep in mind that the robot base dimensions are of 0.36 m diameter, as depicted in Figure \ref{fig:Fig08}). One possible improvement is to adjust these parameters adaptively (online). However, it should be noted that although two mobile robot platforms with very different footprints (both in size and in shape) have been used, only a limited number of parameters related to mediation were adjusted. Moreover, LiDAR readings were adjusted to better accommodate for LiDAR placement on the robot, as will be explained in more detail in Section \ref{sec:MediationExperiment}. 
 
 An example of an estimated robot trajectory including uncertainty ellipses is shown in Figure \ref{Fig:Elipse2}. Please note that in the figure, for clarity reasons, not all ellipses are included. 
 
@@ -299,9 +299,9 @@ The general sigmoid function that was used in the work for calculation of collis
     p_{\textrm{COL}\,i} = \frac{1}{1+e^{-a(i-c)}}
     \label{eq:CollisionProbability}
 \end{equation}
-where $a$ is a constant representing ellipse longer axis (and the one perpendicular to current motion direction), $i\in[1,20]$ is the time instance for which the collision probability is calculated, and $c$ is the distance between the obstacle $(x_O,y_O)$ and estimated robot pose $(x_{R,i},y_{R,i})$ at time instance $i$ defined as
+where $a$ is a constant with a value of -0.25 (determined experimentally), $i\in[1,20]$ is the time instance for which the collision probability is calculated, and $c$ is the indicator of distance between the obstacle $(x_O,y_O)$ and estimated robot pose $(x_{R,i},y_{R,i})$ at time instance $i$ defined as
 \[
-    c=\frac{1}{\sqrt{(x_O-x_{R,i})^2+(y_O-y_{R,i})^2}}
+    c=\frac{16}{\sqrt{(x_O-x_{R,i})^2+(y_O-y_{R,i})^2}}
 \]
 Please note the following:
 
@@ -316,7 +316,7 @@ Finally, when the collision probability values are calculated for each remaining
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.75\textwidth]{slike/fuzzy_member.eps}
+    \includegraphics[width=0.75\textwidth]{slike/Fig03_13.png}
     \caption{The fuzzy set membership function used in the calculation of mediation coefficient $\zeta$.} 
     \label{Fig:Fuzzy}
 \end{figure}
@@ -328,14 +328,11 @@ Each of the previously mentioned sets has its control shift factor, which is the
 where $\mu_{\textrm{XX}\,i}$ is a set membership function for the respective group at time instance $i$, and $\SP_{\textrm{XX}\,i}$ is a shift percentage for the particular set. Then the value of the calculated $\SP_i$ is used as the threshold in the Equation
 \begin{equation}
     \label{Eq:zeta_SP}
-    \begin{gathered}
-        \zeta_{i} =
-        \begin{cases}
-        \zeta_{i-1}+0.35, & \SP_i\geq 0.2 \\
-        \zeta_{i-1}-0.15, & \SP_i < 0.2
-        \end{cases}\\
-        \zeta\in [0,1]
-    \end{gathered}
+    \zeta_{i} =
+    \begin{cases}
+    \min(1, \zeta_{i-1}+0.35), & \SP_i\geq 0.2 \\
+    \max(0, \zeta_{i-1}-0.15), & \SP_i < 0.2
+    \end{cases}
 \end{equation}
 where $\zeta_i$ is mediation coefficient used for calculation of mediated linear and angular velocities at time instance $i$, using the equation (time instance $i$ dropped for clarity reasons, since all quantities pertain to the present time instance)
 \begin{equation}
@@ -363,19 +360,19 @@ Simulation experiments were carried out in the Gazebo 7 simulation environment. 
 
 \begin{figure}
 \centering
-\includegraphics[width=0.7\columnwidth]{slike/ex_simulation.png}
+\includegraphics[width=0.7\columnwidth]{slike/Fig03_14.png}
 \caption{Gazebo simulation environment used for testing of the fuzzy mediation approach}
 \label{Fig:Gazebo3D}
 \end{figure}
 
-The random environment generated during the testing had a fixed size (defined by a perimeter wall) of 25 m $\times$ 25 m and a fixed number of obstacles within it (24, out of which 12 were cylinders and 12 were cubes). This number of obstacles was chosen since it provided a sufficiently challenging environment while not being too cluttered (please keep in mind that the focus of the research was the fuzzy mediation algorithm as a whole and not the obstacle avoidance alone). Fifteen runs were executed in the environment for each navigation controller (P-type controller and neural networks-based controller presented in \cref{sec:MMMediationFormulation}), giving 30 simulation runs. In all runs, neural network-based obstacle avoidance was used (presented in \cref{sec:MMAvoidance}). In each run, the robot started from the same position (centre of the environment) and with the same orientation (looking down in Figure \ref{Fig:Gazebo3D}) and had to navigate to a random point without the map. No time limit was given, and the trajectory and outcome (success or crash) were recorded. Results of this experiment are reported in Section \ref{sec:MediationSimResults}.
+The random environment generated during the testing had a fixed size (defined by a perimeter wall) of 25 m $\times$ 25 m and a fixed number of obstacles within it (24, out of which 12 were cylinders and 12 were cubes). This number of obstacles was chosen since it provided a sufficiently challenging environment while not being too cluttered (please keep in mind that the focus of the research was the fuzzy mediation algorithm as a whole and not the obstacle avoidance alone). Fifteen runs were executed in the environment for each navigation controller (P-type controller and neural networks-based controller presented in \cref{sec:MMMediationFormulation}), giving 30 simulation runs. In all runs, neural network-based obstacle avoidance was used (presented in \cref{sec:MMAvoidance}). In each run, the robot started from the same position (centre of the environment) and with the same orientation (looking down in Figure \ref{Fig:Gazebo3D}) and had to navigate to a randomly given point in the environment, with the map not being available. No time limit was given, and the trajectory and outcome (success or crash) were recorded. Results of this experiment are reported in Section \ref{sec:MediationSimResults}.
 
 \subsubsection{Simple real-world scenarios} \label{sec:MediationReal}
 Real-world experiments were carried in the indoor environment at the Faculty of Electrical Engineering, Mechanical Engineering, and Naval Architecture, University of Split. During the experiments, two mobile robot platforms with very different footprints, masses and characteristics were used: customised Turtlebot 2 depicted in Figure \ref{fig:Fig08} weighing about 10 kg, and a custom-built mobile platform intended to be used as an automated pallet carrier depicted in Figure \ref{Fig:paletarCombo}, weighing about 100 kg. Please note that raw LiDAR data was not fed to the neural network-based obstacle avoidance but rather an adjusted one in the case of a custom-built robot. The adjustment was achieved by simply adding/subtracting from the measured distance (in an online manner), which took into account robot footprint and sensor placement within it (i.e., LiDAR scans were transformed to the robot centre) to be in line with the one used for the training of the neural networks. Of course, if the training were achieved with a different/actual footprint, this step would not be needed, but it shows how the approach can be extended to work with different robots.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.6\textwidth]{slike/paletar.png}
+\includegraphics[width=0.6\textwidth]{slike/Fig03_15.png}
 \caption[Overview of a custom-built robot]{Overview of a custom-built robot (built by our project partner ``Statim'')}
 \label{Fig:paletarCombo}
 \end{figure}
@@ -388,7 +385,7 @@ The same test cases (Z- and U- shape tests) could not be used for the custom-bui
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{slike/res_b401_ex.png}
+    \includegraphics[width=0.8\textwidth]{slike/Fig03_16.png}
     \caption{Test course for the custom-built robot}
     \label{fig:PaletarB401}
 \end{figure}
@@ -397,7 +394,7 @@ Next, the same larger environment for real-life testing was used for both Turtle
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.85\textwidth]{slike/mapa.png}
+    \includegraphics[width=0.85\textwidth]{slike/Fig03_17.png}
     \caption{Real-world experimental area}
     \label{fig:FESB4kat}
 \end{figure}
@@ -409,7 +406,7 @@ The purpose of the final test scenario was to demonstrate the practical applicab
 
 \begin{figure}
 \centering
-\includegraphics[width=1\columnwidth]{slike/teleop.png}
+\includegraphics[width=1\columnwidth]{slike/Fig03_18.png}
 \caption{Overview of a simple teleoperation scenario used in the experiment.}
 \label{Fig:tele2Course}
 \end{figure}
@@ -448,7 +445,7 @@ Commonplace Robotics Mover6 robot is a six-degree-of-freedom robot intended prim
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.75\textwidth]{slike/mover6.jpg}
+    \includegraphics[width=0.75\textwidth]{slike/Fig03_19.jpg}
     \caption[Commonplace Robotics Mover6 robot]{Commonplace Robotics Mover6 robot \cite{Mover6}}
     \label{fig:Mover6}
 \end{figure}
@@ -457,7 +454,7 @@ Unfortunately, the manufacturer did not provide the dynamics model or any releva
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\textwidth]{slike/tool}
+    \includegraphics[width=0.5\textwidth]{slike/Fig03_20.png}
     \caption{Custom-built interaction tool used for data collection}
     \label{fig:Tool}
 \end{figure}
@@ -466,14 +463,14 @@ The robot executed random valid trajectories in the process. The other force sen
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.6\textwidth]{slike/robot}
+    \includegraphics[width=0.6\textwidth]{slike/Fig03_21.png}
     \caption{The process of collecting measurements.}
     \label{fig:Robot}
 \end{figure}
 
 The data were collected as follows. The experimenter holding the interaction tool applied forces to the robot by making contact between the interaction tool dome and the robot end-effector while the robot was either in motion or standstill. Random valid goal positions and orientations were generated during the robot motion, and trajectories were planned and executed. Between two successive motion trajectories, the robot was, for a short time, at a standstill. A random number of up to six contacts were made in a single measurement instance, and a total of 800 measurement instances of random length, ranging from approx. 10 s to approx. 30 s were recorded, resulting in a total of 1,803,875 samples. 
 
-Following the data collection process, before using the data for training neural networks, all obtained measurements were preprocessed so that both robot base and interaction tool forces were expressed in the same reference frame. Next, the forces were expressed in the same reference frame thanks to positions obtained from Optotrak markers; three were positioned on the robot base and three on the interaction tool, which was used to define a reference frame corresponding to the robot base the interaction tool, respectively. Following this, the transformation between the two frames was obtained and used to express both measured forces in a common reference frame so that the principal axes from both force measurements match. Finally, the obtained forces were low-pass filtered to remove noise.
+Following the data collection process, before using the data for training neural networks, all obtained measurements were preprocessed so that both robot base and interaction tool forces were aligned to the same reference frame. Next, the forces were expressed in the same reference frame thanks to positions obtained from Optotrak markers; three were positioned on the robot base and three on the interaction tool, which was used to define a reference frame corresponding to the robot base the interaction tool, respectively. Following this, the transformation between the two frames was obtained and used to express both measured forces in a common reference frame so that the principal axes from both force measurements match. Finally, the obtained forces were low-pass filtered to remove noise.
 
 \subsubsection{Franka Emika Panda robot}
 
@@ -487,14 +484,14 @@ where $A_i$, $\tau_i$ and $\sigma_i$ are amplitude, time offset and standard dev
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{slike/simvsreal.png}
+    \includegraphics[width=0.8\textwidth]{slike/Fig03_22.png}
     \caption{Comparison of external forces in simulation and real world}
     \label{fig:FextSimReal}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\textwidth]{slike/bell.png}
+    \includegraphics[width=0.7\textwidth]{slike/Fig03_23.png}
     \caption{Bell-shaped curve template used to generate external forces in simulation}
     \label{fig:Bell}
 \end{figure}
@@ -503,15 +500,15 @@ The dynamic model of the robot that the simulation was based on was provided in 
 
 There were 1000 measurement instances with between 5 and 50 valid trajectories executed in each. For trajectory generation, first, a valid goal was generated randomly (uniform, in joint space), then a trajectory to that goal from the present robot state was planned using Open Planning Library \cite{Sucan2012} and its default planning algorithm, the Rapidly-exploring Random Tree (RRT) Connect algorithm. If no trajectory was found, the procedure was repeated until a valid trajectory was found. Between the execution of trajectories, there was a 1-second standstill. 
 
-The dataset was split in the following manner. The test set was created using randomly selected 20\% of data instances, while 80\% was used for training and validation purposes. Further random 20\% (or 16\% in terms of total data instances) was used as a validation set, while the rest was used as a training set. With this in mind, the training set consisted of 640 simulation instances, a validation set of 160 simulation instances and a test set of 200 simulation instances.
+The dataset was split in the following manner. The test set was created using randomly selected 20\% of data instances, while 80\% was used for training and validation purposes, from which further random 20\% (or 16\% in terms of the whole dataset) was used as a validation set. The rest was used as a training set. With this in mind, the training set consisted of 640 simulation instances, a validation set of 160 simulation instances and a test set of 200 simulation instances.
 
 A total of 3,919,800 samples were collected, which took about 48 hours in simulation on a computer with an Intel Core i3-6100 processor with 16 GB RAM, but in practice, that was a shorter time since simulation runs faster than real-time. The simulation engine used for the simulations was provided by the CoppeliaSim environment, and it was the Newton Dynamics engine \cite{Massera2007}. The simulation step was set to 50 ms. An example of simulation running using the described experimental setup with four visualised trajectories and plotted forces on base and tip is shown in \cref{fig:Coppelia}. Please note that periods may exist without an external force acting on the end-effector during the execution of the trajectories. This way, the dataset was made more diverse in order to generalise better. 
 
 \begin{figure}
     \centering
-    \subfloat[CoppeliaSim with four visualised trajectories]{\includegraphics[width=0.35\textwidth]{slike/coppelia.png}}
+    \subfloat[CoppeliaSim with four visualised trajectories]{\includegraphics[width=0.35\textwidth]{slike/Fig03_24a.png}}
     \hfill
-    \subfloat[Corresponding three force interactions for the visualised trajectories]{\includegraphics[width=0.55\textwidth]{slike/forces.png}}
+    \subfloat[Corresponding three force interactions for the visualised trajectories]{\includegraphics[width=0.55\textwidth]{slike/Fig03_24b.png}}
     \caption{Example of the running simulation}
     \label{fig:Coppelia}
 \end{figure}
@@ -524,9 +521,9 @@ Special consideration was given to interconnection between the robot base, Kistl
 
 \begin{figure}
     \centering
-    \subfloat[Franka robot during measurements with installed sensor under the base\label{fig:FrankaExpSetup}]{\includegraphics[width=0.45\textwidth]{slike/franka_exp.png}}
+    \subfloat[Franka robot during measurements with installed sensor under the base\label{fig:FrankaExpSetup}]{\includegraphics[width=0.45\textwidth]{slike/Fig03_25a.png}}
     \hfill
-    \subfloat[Interconnection between the robot base, force sensor and the environment\label{fig:FrankaBase}]{\includegraphics[width=0.45\textwidth]{slike/mdpi/franka_baza.png}}
+    \subfloat[Interconnection between the robot base, force sensor and the environment\label{fig:FrankaBase}]{\includegraphics[width=0.45\textwidth]{slike/Fig03_25b.png}}
     \caption{Real-world experimental setup with Franka robot}
     \label{fig:FrankaExp}
 \end{figure}
@@ -607,7 +604,7 @@ Thus, only a relatively small-scale hyperparameter optimisation was conducted to
         Activation function & ReLU, ELU, Tanh \\
         Number of LSTM layers & 1 -- 3 \\ % mlp_03
         Number of cells per LSTM layer & 8 -- 64, step 8 \\ % mlp_04
-        Number of FX layers & 2 -- 4 \\ % conv_01
+        Number of FC layers & 2 -- 4 \\ % conv_01
         Number of neurons per FC layer & 8 -- 64, step 8 \\ % conv_02
         \bottomrule
     \end{tabular}
@@ -630,7 +627,7 @@ For this experiment, neural networks were trained with simulation data and with 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\textwidth]{slike/franka_torque.png}
+    \includegraphics[width=0.5\textwidth]{slike/Fig03_26.png}
     \caption{Real Franka robot experimental setup for joint torques estimation}
     \label{fig:FrankaTorqueSetup}
 \end{figure}
@@ -662,7 +659,7 @@ Architectures of trained networks for joint torques estimation are shown in \cre
 Please note that this experiment could not be conducted on the Mover6 robot since the robot's controller does not provide joint torques, which are used as network outputs in this approach.
 
 % NOVO OPTIMIZACIJA
-Finally and similarly to the previous experiment, a hyperparameter optimisation procedure was performed to assess if there was some improvement in the performance of the networks. The search space was the same as one in \cref{sec:MMNNEE}, while the results are presented and discussed in \cref{sec:ResJoint}.
+Finally, and similarly to the previous experiment, a hyperparameter optimisation procedure was performed to assess if there was some improvement in the performance of the networks. The search space was the same as one in \cref{sec:MMNNEE}, while the results are presented and discussed in \cref{sec:ResJoint}.
 % NOVO KRAJ
 
 As a final experiment on joint torques estimation, the base-mount force sensor was replaced by four single-axis force sensors. These low-cost sensors were based on strain gauges and are shown in \cref{fig:StrainGauge}. They were put into a rectangular configuration shown in \cref{fig:Platform}, on top of which an aluminium plate with a robot mounted on it was put. This experiment was conducted only using a real-world Franka robot since these sensors are not available in the simulation. Data acquisition was based on an HX711 24-bit A/D converter and Arduino Uno (the same Arduino board was used to acquire data from all the sensors).
@@ -671,7 +668,7 @@ The procedure of collecting data was the same as in previous experiments, where 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\textwidth]{slike/Load-Cell.png}
+    \includegraphics[width=0.5\textwidth]{slike/Fig03_27.png}
     \caption{Low-cost single-axis force sensor}
     \label{fig:StrainGauge}
 \end{figure}
@@ -680,7 +677,7 @@ The network architectures trained were multilayer perceptron, convolutional, and
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.6\textwidth]{slike/platform.png}
+    \includegraphics[width=0.6\textwidth]{slike/Fig03_28.png}
     \caption{Base force measurement platform based on multiple single-axis force sensors}
     \label{fig:Platform}
 \end{figure}
